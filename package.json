@@ -1,0 +1,13 @@
+{
+  "name": "object_wrap",
+  "version": "0.0.0",
+  "description": "NAPI Object Wrapper",
+  "main": "addon.js",
+  "private": true,
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "node-addon-api": "*",
+    "readline-sync": "^1.4.10"
+  }
+}
