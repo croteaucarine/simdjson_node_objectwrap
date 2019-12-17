@@ -276,88 +276,59 @@ Napi::Value Keys(const Napi::CallbackInfo& info) {
   return v;
 }
 
-  static Napi::Value ObjectGetter(const Napi::CallbackInfo& info) {
-    Napi::Value propertyValue;
-
-  const UserDataHolder* data = reinterpret_cast<UserDataHolder*>(info.Data());
-  //Napi::Object _this = info.This().As<Napi::Object>();
-  //Napi::External<ParsedJson> buffer = _this.Get("buffer").As<Napi::External<ParsedJson>>();
-  Napi::Env env = info.Env();
-  
-  std::cout << data->location;
-
-  simdjson::ParsedJson pj ; //= data->pj;  TODO trouver un moyen de passer une fonction non statique!!
-  simdjson::ParsedJson::Iterator pjh(pj);
-
-  try {
-    pjh.move_to_specific_location(data->location);
-
-    if(pjh.is_object()) {
-      //propertyValue = makeJSONObject1Depth(env, *pj);
-      propertyValue = Napi::String::New(env, "Objet");
-    } else if((*pj).is_array()) {
-      propertyValue = Napi::String::New(env, "Array");
-    } else if ((*pj).is_string()) {
-      propertyValue = Napi::String::New(env, (*pj).get_string());
-    } else if ((*pj).is_double()) {
-      propertyValue = Napi::Number::New(env, (*pj).get_double());
-    } else if ((*pj).is_integer()) {
-      propertyValue = Napi::Number::New(env, (*pj).get_double());
-    } else {
-      switch ((*pj).get_type()) {
-        case 't':  {
-          propertyValue = Napi::Boolean::New(env, true);
-          break;
-        }
-        case 'f': {
-          propertyValue = Napi::Boolean::New(env, false);
-          break;
-        }
-        case 'n': {
-          propertyValue = Napi::Value(info.Env(), env.Null());
-          break;
-        }
-        default : 
-          propertyValue = Napi::Number::New(env, (*pj).get_type());
-          break;
-      }
-    } 
-  } catch (...) {
-    propertyValue = Napi::String::New(info.Env(), "Impossible de récupérer la propriété ");
-  }
-  //   propertyValue = Napi::String::New(info.Env(), "Impossible de récupérer la propriété " + holder->key);
-  // }
-  //ParsedJson::iterator pjh(*pj);
-  
-  // try {
-  //   propertyValue = simdjsonnode::findKeyPath(info.Env(), parseKeyPath(holder->key), pjh);
-  // } catch (...) {
-  //   propertyValue = Napi::String::New(info.Env(), "Impossible de récupérer la propriété " + holder->key);
-  // }
-
-  
-  return propertyValue;
-}
-
 struct UserDataHolder {
   size_t location;
-  simdjson::ParsedJson pj;
 };
 
-static Napi::PropertyDescriptor getProperty(Napi::Env env, Napi::Object& obj, Napi::String key, simdjson::ParsedJson::Iterator& pjh) {
+Napi::Value ObjectGetter(const Napi::CallbackInfo& info) {
+   const UserDataHolder* holder = reinterpret_cast<UserDataHolder*>(info.Data());
+
+   //std::cout << holder->location;
+   //std::cout << "\n";
+  simdjson::ParsedJson::Iterator pjh(_pj);
+  pjh.move_to_specific_location(holder->location);
+  // std::cout << holder->location;
+  // std::cout << pjh.get_type();
+  //   std::cout << "\n";
+  // if(pjh.is_object()) {
+  //   std::cout << "2. object";
+  //   std::cout << "\n";
+  // } else if (pjh.is_array()) {
+  //   std::cout << "2. array";
+  //   std::cout << "\n";
+  // } 
+  
+  // return Napi::Value(info.Env(), info.Env().Null());  
+  return makeJSONObject1Depth(info.Env(), pjh);
+}
+
+Napi::PropertyDescriptor getProperty(Napi::Env env, Napi::Object& obj, Napi::String key, simdjson::ParsedJson::Iterator& pjh) {
   Napi::PropertyDescriptor pd = Napi::PropertyDescriptor::Value("", env.Null()); 
   
   if(pjh.is_object()) {
-    UserDataHolder* data = new UserDataHolder();
-    data->location = pjh.get_tape_location;
-    data->pj = _pj;
+      UserDataHolder* holder = new UserDataHolder();
+      holder->location = pjh.get_tape_location();
+      // std::cout << "1. object : ";
+      // std::cout << key.ToString();
+      // std::cout << " : ";
+      // std::cout << holder->location;
+      // std::cout << "\n";
 
-    //holder->key = key;      
-    pd = Napi::PropertyDescriptor::Accessor(env, obj, key, ObjectGetter, napi_enumerable, reinterpret_cast<void*>(data));
+      auto callbackGetter = std::bind(&simdjsonJS::ObjectGetter, this, std::placeholders::_1);
+      pd = Napi::PropertyDescriptor::Accessor(env, obj, key, callbackGetter, napi_enumerable, reinterpret_cast<void*>(holder));
    } else if (pjh.is_array()) {
-    //UserDataHolder* holder = new UserDataHolder();
-    //holder->key = key;  
-    //pd = Napi::PropertyDescriptor::Accessor(env, obj, key, ObjectAccessor, napi_enumerable, reinterpret_cast<void*>(holder));
+     UserDataHolder* holder = new UserDataHolder();
+     holder->location = pjh.get_tape_location(); 
+
+    //   std::cout << "1. array";
+    //   std::cout << key;
+    //   std::cout << " : ";
+    //   std::cout << holder->location;
+    //   std::cout << "\n";
+
+    auto callbackGetter = std::bind(&simdjsonJS::ObjectGetter, this, std::placeholders::_1);
+    pd = Napi::PropertyDescriptor::Accessor(env, obj, key, callbackGetter, napi_enumerable, reinterpret_cast<void*>(holder));
+
   } else if (pjh.is_string()) {
     pd = Napi::PropertyDescriptor::Value(key, Napi::String::New(env, pjh.get_string()), napi_enumerable);
   } else if (pjh.is_double()) {
@@ -385,8 +356,9 @@ static Napi::PropertyDescriptor getProperty(Napi::Env env, Napi::Object& obj, Na
   return pd;
 }
 
-  static Napi::Value makeJSONObject1Depth(Napi::Env env, simdjson::ParsedJson::Iterator & pjh) {
+  Napi::Value makeJSONObject1Depth(Napi::Env env, simdjson::ParsedJson::Iterator & pjh) {
   Napi::Value v;
+
   if (pjh.is_object()) {
     Napi::Object obj = Napi::Object::New(env); // {
     if (pjh.down()) {

@@ -26,6 +26,7 @@ const update_center = 'jsonexamples/update-center.json';
 
 const files = [github_events];
 
+
     files.forEach(file => {
         console.log("***************  " + file + "  ***************");
         const content = fs.readFileSync(file, 'utf-8');
@@ -57,36 +58,57 @@ const files = [github_events];
 
         console.log()*/
 
-        console.log(simdjsonOBJ[0]);
-
-        /*try {
+        try {
             console.log("4.1 itération de l\'objet simdjson");
             var i  = 1;
             for (let item of simdjsonOBJ) {
-                console.log(i + " - " + item);
+                //console.log(i + " - " + item);
 
+                console.log("item");
                 console.log(item);
+
+                console.log("testUndefinedObject");
+                console.log(item.testUndefinedObject);
+
+                console.log("actor");
+                console.log(item.actor);
+
+                console.log("repo");
+                console.log(item.repo);
+
+                console.log("org");
+                console.log(item.org);
+
+                console.log("payload");
+                console.log(item.payload);
+
+                console.log("payload.commits");
+                console.log(item.payload.commits);
+
+                console.log("payload.forkee");
+                console.log(item.payload.forkee);
                 i++;
             }
         } catch(error) {
             console.error(error);
         }
-        
-        var response = readlineSync.question('Press enter to continue... q to quit');
 
-        try {
-            console.log("4.2 itération de l\'objet JSON");
-            var i  = 1;
-            for (let item of jsonOBJ) {
-                console.log(i + " - " + item);
+        // try {
+        //     console.log("4.2 itération de l\'objet JSON");
+        //     var i  = 1;
+        //     for (let item of jsonOBJ) {
+        //         console.log(i + " - " + item);
 
-                console.log(item);
+        //         if(i == 1) {
+        //             console.log(item);
+        //         }
 
-                i++;
-            }
-        } catch(error) {
-            console.error(error);
-        }
+        //         //console.log(item.actor);
+        //         i++;
+        //     }
+        // } catch(error) {
+        //     console.error(error);
+        // }
 
         console.log();
 
