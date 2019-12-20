@@ -71,7 +71,15 @@ try {
 ```
 
 ## Benchmarks
-...
+The script benchmarks.js contains the comparaison between the default JavaScript method JSON.parse and parsing with simdjson. 
+The benchmarks runs with multiple JSON file formats that are located in the jsonexamples folder. 
+To run benchmarks : ``node --exopse-gc benchmarks.js```
+
+### Benchmarks results in GB/s
+
+
+
+
 
 
 
