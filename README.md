@@ -14,11 +14,10 @@
 git clone https://github.com/croteaucarine/simdjson_node_objectwrap
 cd simdjson_node_objectwrap
 npm install
-node example.js
 ```
 
 ## Code usage and example
-Example below is also available in repo under the file example.js
+Example below is also available in repo under the file example.js and can be run with ```node example.js```
 ```javascript
 'use strict';
 
