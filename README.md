@@ -76,7 +76,22 @@ The benchmarks runs with multiple JSON file formats that are located in the json
 To run benchmarks : ``node --exopse-gc benchmarks.js```
 
 ### Benchmarks results in GB/s
-
+|      File       |        JSON#parse        | simdjson#parse |
+| ------------- | ------------- |------------- |
+| apache_builds.json |       0.3508060654       |  1.2776726171       |
+| canada.json |       0.1411976798       | 0.6375911861       |
+| citm_catalog.json |       0.4489479678       |  0.3123227330       |
+| github_events.json |       0.3431752242       |  0.8627043830       |
+| gsoc-2018.json |       0.6820689779       |  1.2901085179       |
+| instruments.json |       0.3263017406       |  1.0613046511       |
+| marine_ik.json |       0.1985107722       |  0.5801906399       |
+| mesh.json |       0.2001960761       |  0.5928486893       |
+| mesh.pretty.json |       0.3109946339       |  0.5928486893       |
+| numbers.json |       0.2051137580       |  0.6850210674       |
+| random.json |       0.2188974147       |  0.2741147806       | 
+| twitter.json |       0.2819563119       |  0.3169782538       | 
+| twitterescaped.json |       0.2307891846       |   0.8102025150       |
+| update-center.json |       0.1986242831       |  0.2975296458       | 
 
 
 
