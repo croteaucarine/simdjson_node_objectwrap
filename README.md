@@ -12,7 +12,9 @@
 ## Getting started
 ```
 git clone https://github.com/croteaucarine/simdjson_node_objectwrap
+cd simdjson_node_objectwrap
 npm install
+node example.js
 ```
 
 ## Code usage and example
