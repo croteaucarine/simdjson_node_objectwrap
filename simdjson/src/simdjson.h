@@ -37167,7 +37167,9 @@ bool ParsedJson::Iterator::move_to_specific_location(size_t location) {
     return false; // we are at the end!
   }
 
-  this.location = location;
+  this->location = location;
+  current_val = pj.tape[location];
+  current_type = (current_val >> 56);
   return true;
 }
 
