@@ -57,20 +57,28 @@ const files = [github_events];
 
         console.log()*/
 
-        console.log(simdjsonOBJ[0]);
-
-        /*try {
+        
+        const values = [];
+        try {
+            
             console.log("4.1 itération de l\'objet simdjson");
             var i  = 1;
             for (let item of simdjsonOBJ) {
                 console.log(i + " - " + item);
-
+                values.push(item);
                 console.log(item);
                 i++;
             }
         } catch(error) {
             console.error(error);
         }
+
+        console.log("Affichage d'un élément spécifique dans le tableau");
+        // Possible d'y accéder si on enregistre l'objet. Limitation, mais intéressant quand même
+        console.log(values[3]);
+        console.log(values[3].actor);
+        console.log(simdjsonOBJ[0]);
+        console.log(simdjsonOBJ[2]);
         
         var response = readlineSync.question('Press enter to continue... q to quit');
 
@@ -89,6 +97,10 @@ const files = [github_events];
         }
 
         console.log();
+
+        console.log("Affichage d'un élément spécifique dans le tableau");
+        console.log(jsonOBJ[3]);
+        var response = readlineSync.question('Press enter to continue... q to quit');
 
         /*console.log('Affichage de l\'objet - JSON.strignify');
         console.log(JSON.stringify(simdjsonOBJ));

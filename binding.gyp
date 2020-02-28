@@ -4,7 +4,7 @@
       "target_name": "addon",
       "sources": [ 
           "simdjson/src/simdjson.cpp",
-          "addon.cpp" 
+          "src/addon.cpp" 
         ],
       'include_dirs': ["<!@(node -p \"require('node-addon-api').include\")"],
     'dependencies': ["<!(node -p \"require('node-addon-api').gyp\")"],
