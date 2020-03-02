@@ -214,12 +214,27 @@ public:
   Napi::Value GetValue(const Napi::CallbackInfo &info)
   {
     Napi::Env env = info.Env();
-    Napi::String jsonPointer = info[0].As<Napi::String>();
-    
-    simdjson::ParsedJson::Iterator pjh(_pj);
-    pjh.move_to(jsonPointer);
 
-    return makeJSONObject1Depth(env, pjh);
+    if (info.Length() == 0)
+    {
+      Napi::Error::New(env, "Missing JSON Pointer parameter").ThrowAsJavaScriptException();
+      return env.Null();
+    } 
+    else if(!info[0].IsString())
+    {
+      Napi::Error::New(env, "JSON Pointer parameter must be a string").ThrowAsJavaScriptException();
+      return env.Null();
+    }
+    else
+    {
+      Napi::String jsonPointer = info[0].As<Napi::String>();
+      
+      // Todo : Valider si le paramètre reçu est une chaîne de caractères
+      simdjson::ParsedJson::Iterator pjh(_pj);
+      pjh.move_to(jsonPointer);
+
+      return makeJSONObject1Depth(env, pjh);
+    }
   }
   
 
