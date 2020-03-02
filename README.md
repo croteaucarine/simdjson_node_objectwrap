@@ -73,7 +73,7 @@ try {
     console.error(error);
 }
 ```
-### JSON Pointer example ([JavaScript Object Notation (JSON) Pointer (RFC 6901))](https://tools.ietf.org/html/rfc6901)
+### JSON Pointer example ([JavaScript Object Notation (JSON) Pointer (RFC 6901)](https://tools.ietf.org/html/rfc6901))
 Example below and more JSON Pointer uses are also available in repo under the file jsonPointer.js and can be run with ```node jsonPointer.js```
 
 ```javascript
