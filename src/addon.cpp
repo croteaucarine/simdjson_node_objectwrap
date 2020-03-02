@@ -211,6 +211,18 @@ public:
     return constructor.Value().Get("length");
   }
 
+  Napi::Value GetValue(const Napi::CallbackInfo &info)
+  {
+    Napi::Env env = info.Env();
+    Napi::String jsonPointer = info[0].As<Napi::String>();
+    
+    simdjson::ParsedJson::Iterator pjh(_pj);
+    pjh.move_to(jsonPointer);
+
+    return makeJSONObject1Depth(env, pjh);
+  }
+  
+
   // todo: implémenter les foncitons de tableau
   // Array.prototype.filter() : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
   // Array.isArray() : bool : vraiment facile
@@ -568,6 +580,7 @@ public:
 
       // conventions
       InstanceMethod("toJSON", &simdjsonJS::toJSON, napi_enumerable), 
+      InstanceMethod("getValue", &simdjsonJS::GetValue, napi_enumerable),
       InstanceAccessor(Napi::Symbol::WellKnown(env, "toStringTag"), &simdjsonJS::ToStringTag, nullptr, napi_enumerable), 
       InstanceMethod(Napi::Symbol::WellKnown(env, "iterator"), &simdjsonJS::Iterator, napi_enumerable)
     });
