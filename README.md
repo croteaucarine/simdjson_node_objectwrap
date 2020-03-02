@@ -1,6 +1,6 @@
 # simdjson, Node.js and Napi::ObjectWrap
 
-## A Napi:ObjectWrap that allows to use C++ simdjson library with Node.js
+## A Napi::ObjectWrap that allows to use C++ simdjson library with Node.js
 ...
 
 ## Performance results
