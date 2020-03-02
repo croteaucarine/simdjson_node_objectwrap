@@ -17,7 +17,11 @@ npm install
 ```
 
 ## Code usage and example
+The library implements JSON parsing and basic JSON methods length and keys. It is also iterable and compatible with JSON.stringify(), Object.getOwnPropertyNames(), and Object.getOwnPropertyDescriptors(). The library also implements navigation through JSON pointer defined by the [RFC6901 standard](https://tools.ietf.org/html/rfc6901).
+
+### Basic usage example
 Example below is also available in repo under the file example.js and can be run with ```node example.js```
+
 ```javascript
 'use strict';
 
@@ -68,6 +72,34 @@ try {
 } catch(error) {
     console.error(error);
 }
+```
+### JSON Pointer example ([JavaScript Object Notation (JSON) Pointer (RFC 6901)](https://tools.ietf.org/html/rfc6901)
+Example below and more JSON Pointer uses are also available in repo under the file jsonPointer.js and can be run with ```node jsonPointer.js```
+
+```javascript
+const twitter = 'jsonexamples/twitter.json';
+content = fs.readFileSync(twitter, 'utf-8');
+simdjsonOBJ = new simdjson(content);
+
+console.log("JSON pointer : /statuses/0/id");   // outputs 505874924095815700
+console.log("JSON pointer : /statuses/1/id");   // outputs 505874922023837700
+
+```
+
+```javascript
+'use strict';
+
+const fs = require('fs');
+const { simdjson } = require('bindings')('addon');
+
+const demo = 'jsonexamples/small/demo.json';
+var content = fs.readFileSync(demo, 'utf-8');
+var simdjsonOBJ = new simdjson(content);
+
+console.log("JSON pointer : /Image/IDs/2");
+console.log(simdjsonOBJ.getValue('/Image/Width'));  // outputs 800
+console.log(simdjsonOBJ.getValue('/Image/Height')); // outputs 600
+console.log(simdjsonOBJ.getValue('/Image/Width') * simdjsonOBJ.getValue('/Image/Height')); // outputs 480000
 ```
 
 ## Benchmarks
