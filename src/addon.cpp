@@ -3,6 +3,8 @@
 #include <thread>
 #include <future>
 #include "../simdjson/src/simdjson.h"
+#include <chrono>
+
 using namespace simdjson;
 
 class simdjsonJS : public Napi::ObjectWrap<simdjsonJS>
@@ -10,6 +12,16 @@ class simdjsonJS : public Napi::ObjectWrap<simdjsonJS>
 public:
   simdjsonJS(const Napi::CallbackInfo &info) : Napi::ObjectWrap<simdjsonJS>(info)
   {
+    int res = 0;
+    /*std::chrono::steady_clock::time_point startGetFile;
+    std::chrono::steady_clock::time_point endGetFile;
+    std::chrono::steady_clock::time_point startAlloc;
+    std::chrono::steady_clock::time_point endAlloc;
+    std::chrono::steady_clock::time_point startParse;
+    std::chrono::steady_clock::time_point endParse;*/
+
+    //std::chrono::steady_clock::time_point  start = std::chrono::steady_clock::now();
+
     Napi::Env env = info.Env();
     constructor.Value().Delete("jsObject");
     constructor.Value().Delete("keys");
@@ -22,24 +34,47 @@ public:
     else
     {
       // Todo gérer exceptions si le paramètre est incorrect
-      Napi::Value param = info[0].As<Napi::Value>();
-      this->_jsonRaw = param.ToString();
+      
+      //startGetFile = std::chrono::steady_clock::now();
 
-      bool alloc = _pj.allocate_capacity(this->_jsonRaw.size()); // allocate memory for parsing up to p.size() bytes
-      if (alloc)
-      {
-        const int res = simdjson::json_parse(this->_jsonRaw, _pj); // do the parsing, return 0 on success
+      if(info[0].IsString()) {
+        // String passed is considered as JSON Document
+        Napi::Value param = info[0].As<Napi::Value>();
+        std::string jsonRaw = param.ToString();
+        bool alloc = _pj.allocate_capacity(jsonRaw.size()); // allocate memory for parsing up to p.size() bytes
+        if (alloc) res = simdjson::json_parse(jsonRaw, _pj); // do the parsing, return 0 on success
+      } else if (info[0].IsObject()) {
+        Napi::Object obj = info[0].As<Napi::Object>();
 
-        if (res != 0)
-        {
-          Napi::Error::New(env, "Error parsing:" + simdjson::error_message(res)).ThrowAsJavaScriptException();
+        if(obj.Has("path") && obj.Get("path").IsString()) {
+          std::string path = obj.Get("path").ToString();
+          simdjson::padded_string doc = simdjson::get_corpus(path);
+          bool alloc = _pj.allocate_capacity(doc.size()); // allocate memory for parsing up to p.size() bytes
+          if (alloc) res = simdjson::json_parse(doc, _pj); // do the parsing, return 0 on success
+        } else if(obj.Has("doc") && obj.Get("doc").IsString()) {
+          std::string jsonRaw = obj.Get("doc").ToString();
+          bool alloc = _pj.allocate_capacity(jsonRaw.size()); // allocate memory for parsing up to p.size() bytes
+          if (alloc) res = simdjson::json_parse(jsonRaw, _pj); // do the parsing, return 0 on success
+        } else {
+          // Throw error : Object is missing parameter path or doc
         }
       }
-      else
+      //endGetFile = std::chrono::steady_clock::now();
+      /*if (res != 0)
+      {
+        Napi::Error::New(env, "Error parsing:" + simdjson::error_message(res)).ThrowAsJavaScriptException();
+      }*/
+      
+      /*else
       {
         Napi::Error::New(env, "Error allocating memory:").ThrowAsJavaScriptException();
-      }
+      }(*/
     }
+    //auto end = std::chrono::steady_clock::now();
+    /*std::cout << "Getting parameter time : "  << std::chrono::duration_cast<std::chrono::nanoseconds>(endGetFile - startGetFile).count() << std::endl;
+    std::cout << "Allocation time : "  << std::chrono::duration_cast<std::chrono::nanoseconds>(endAlloc - startAlloc).count() << std::endl;
+    std::cout << "Parse time : "  << std::chrono::duration_cast<std::chrono::nanoseconds>(endParse - startParse).count() << std::endl;
+    std::cout << "Constructor time: "  << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;*/
   }
 
   Napi::Value toJSON(const Napi::CallbackInfo& info) {
@@ -617,8 +652,6 @@ public:
   }
 
 private:
-  std::string _jsonRaw;
-  std::string _jsonString;
   simdjson::ParsedJson _pj;
   static Napi::FunctionReference constructor;
 };

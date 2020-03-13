@@ -3,9 +3,8 @@
 const fs = require('fs');
 const { simdjson } = require('bindings')('addon');
 
-const deo = 'jsonexamples/github_events.json';
-const content = fs.readFileSync(github_events, 'utf-8');
-const simdjsonOBJ = new simdjson(content);
+const github_events = 'jsonexamples/github_events.json';
+const simdjsonOBJ = new simdjson({path : github_events});
 
 // Display object content
 console.log(simdjsonOBJ);
