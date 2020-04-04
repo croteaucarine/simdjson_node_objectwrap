@@ -135,6 +135,9 @@ To run benchmarks : ```node --exopse-gc benchmarks.js```
 ![GBPS Graph](doc/gbps.png)
 
 
+## License
+This code is made available under the Apache License 2.0.
+
 
 
 
