@@ -4,7 +4,10 @@ const fs = require('fs');
 const { simdjson } = require('bindings')('addon');
 
 const github_events = 'jsonexamples/github_events.json';
-const simdjsonOBJ = new simdjson({path : github_events});
+//const simdjsonOBJ = new simdjson({path : github_events});
+const simdjsonOBJ = new simdjson();
+simdjsonOBJ.load({path : github_events});
+simdjsonOBJ.parse();
 
 // Display object content
 console.log(simdjsonOBJ);
