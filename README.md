@@ -2,7 +2,7 @@
 
 ## A Napi::ObjectWrap that allows to use C++ simdjson library with Node.js
 This is a project wrapping the simdjson library for un use in Node. 
-Please note that it is a master projet and is still in developement. I am still woriking on some approaches to omptimze performances, but results so far seems interesting.  
+**Note** : This is a master projet and is **still in developement**. I am still woriking on some approaches to omptimze performances, but results so far seems interesting.  
 
 ## Requirements
 (to be completed). When upgraded to simdjson 3.0 (coming soon!), any computer shoud be able to run projet. Performances are a lot more interesting on computers with an SIMD architecture. 
@@ -110,7 +110,7 @@ The script benchmarks.js contains the comparaison between the default JavaScript
 The benchmarks runs with multiple JSON file formats that are located in the jsonexamples folder. 
 To run benchmarks : ```node --exopse-gc benchmarks.js```
 
-Note : Parts of code have been rewritten after the publications of theses benchmarks. New benchmarks will be published soon!
+**Note** : Parts of code have been rewritten after the publications of theses benchmarks. New benchmarks will be published soon!
 
 ### Benchmarks results in GB/s
 |      File       |        JSON#parse        | simdjson#parse |
@@ -131,6 +131,7 @@ Note : Parts of code have been rewritten after the publications of theses benchm
 | update-center.json |       0.1986242831       |  0.2975296458       | 
 
 ## Performance results
+**Note** : Parts of code have been rewritten after the publications of theses results. New graph will be published soon!
 ![GBPS Graph](doc/gbps.png)
 
 
