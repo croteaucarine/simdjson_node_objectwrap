@@ -4,9 +4,6 @@
 This is a project wrapping the simdjson library for un use in Node. 
 Please note that it is a master projet and is still in developement. I am still woriking on some approaches to omptimze performances, but results so far seems interesting.  
 
-## Performance results
-![GBPS Graph](doc/gbps.png)
-
 ## Requirements
 (to be completed). When upgraded to simdjson 3.0 (coming soon!), any computer shoud be able to run projet. Performances are a lot more interesting on computers with an SIMD architecture. 
 
@@ -133,7 +130,8 @@ Note : Parts of code have been rewritten after the publications of theses benchm
 | twitterescaped.json |       0.2307891846       |   0.8102025150       |
 | update-center.json |       0.1986242831       |  0.2975296458       | 
 
-
+## Performance results
+![GBPS Graph](doc/gbps.png)
 
 
 
