@@ -1,13 +1,14 @@
 # simdjson, Node.js and Napi::ObjectWrap
 
 ## A Napi::ObjectWrap that allows to use C++ simdjson library with Node.js
-...
+This is a project wrapping the simdjson library for un use in Node. 
+Please note that it is a master projet and is still in developement. I am still woriking on some approaches to omptimze performances, but results so far seems interesting.  
 
 ## Performance results
 ![GBPS Graph](doc/gbps.png)
 
 ## Requirements
-...
+(to be completed). When upgraded to simdjson 3.0 (coming soon!), any computer shoud be able to run projet. Performances are a lot more interesting on computers with an SIMD architecture. 
 
 ## Getting started
 ```
@@ -15,6 +16,12 @@ git clone https://github.com/croteaucarine/simdjson_node_objectwrap
 cd simdjson_node_objectwrap
 npm install
 ```
+
+## Constructor
+- new simdjson() : Creates an empty object. load and parse must be called in order to manipulate the object.
+- new simdjson(string document) : Creates a fully manipulable object. 
+- new simdjson(object path) : Key path must me used to send defined path as string (example : {path : 'mydoc.json'}). Creates a fully manipulable object. 
+- new simdjson(object doc) : Key path must me used to send document as string (example : {doc : docVariable}). Creates a fully manipulable object. 
 
 ## Code usage and example
 The library implements JSON parsing and basic JSON methods length and keys. It is also iterable and compatible with JSON.stringify(), Object.getOwnPropertyNames(), and Object.getOwnPropertyDescriptors(). The library also implements navigation through JSON pointer defined by the [RFC6901 standard](https://tools.ietf.org/html/rfc6901).
@@ -28,9 +35,7 @@ Example below is also available in repo under the file example.js and can be run
 const fs = require('fs');
 const { simdjson } = require('bindings')('addon');
 
-const github_events = 'jsonexamples/github_events.json';
-const content = fs.readFileSync(github_events, 'utf-8');
-const simdjsonOBJ = new simdjson(content);
+const simdjsonOBJ = new simdjson({path : 'jsonexamples/github_events.json'});
 
 // Display object content
 console.log(simdjsonOBJ);
@@ -73,6 +78,7 @@ try {
     console.error(error);
 }
 ```
+
 ### JSON Pointer example ([JavaScript Object Notation (JSON) Pointer (RFC 6901)](https://tools.ietf.org/html/rfc6901))
 Example below and more JSON Pointer uses are also available in repo under the file jsonPointer.js and can be run with ```node jsonPointer.js```
 
@@ -106,6 +112,8 @@ console.log(simdjsonOBJ.getValue('/Image/Width') * simdjsonOBJ.getValue('/Image/
 The script benchmarks.js contains the comparaison between the default JavaScript method JSON.parse and parsing with simdjson. 
 The benchmarks runs with multiple JSON file formats that are located in the jsonexamples folder. 
 To run benchmarks : ```node --exopse-gc benchmarks.js```
+
+Note : Parts of code have been rewritten after the publications of theses benchmarks. New benchmarks will be published soon!
 
 ### Benchmarks results in GB/s
 |      File       |        JSON#parse        | simdjson#parse |
