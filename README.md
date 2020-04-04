@@ -108,7 +108,7 @@ console.log(simdjsonOBJ.getValue('/Image/Width') * simdjsonOBJ.getValue('/Image/
 ## Benchmarks
 The script benchmarks.js contains the comparaison between the default JavaScript method JSON.parse and parsing with simdjson. 
 The benchmarks runs with multiple JSON file formats that are located in the jsonexamples folder. 
-To run benchmarks : ```node --exopse-gc benchmarks.js```
+To run benchmarks : ```node --expose-gc benchmarks.js```
 
 **Note** : Parts of code have been rewritten after the publications of theses benchmarks. New benchmarks will be published soon!
 
