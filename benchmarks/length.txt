@@ -1,0 +1,18 @@
+|      Fichier       |        simdjson#length        |  unité |   iterations  |   resultat    |
+| apache_builds.json |       0.0107935390       |  ms     | 1000 | 0
+| canada.json |       0.0078085650       |  ms     | 1000 | 0
+| citm_catalog.json |       0.0117550910       |  ms     | 1000 | 0
+| github_events.json |       0.0113768230       |  ms     | 1000 | 0
+| gsoc-2018.json |       0.0136781730       |  ms     | 1000 | 0
+| instruments.json |       0.0093856820       |  ms     | 1000 | 0
+| marine_ik.json |       0.0098910620       |  ms     | 1000 | 0
+| mesh.json |       0.0108049750       |  ms     | 1000 | 0
+| mesh.pretty.json |       0.0271736720       |  ms     | 1000 | 0
+| numbers.json |       0.0150353370       |  ms     | 1000 | 0
+| random.json |       0.0146811220       |  ms     | 1000 | 0
+| twitter.json |       0.0336400940       |  ms     | 1000 | 0
+| twitterescaped.json |       0.0103557630       |  ms     | 1000 | 0
+| update-center.json |       0.0490459220       |  ms     | 1000 | 0
+
+|      Fichier       |        JSON#length        |  unité |   iterations  |   resultat    |
+| apache_builds.json |       0.0051518830       |  ms     | 1000 | undefined
