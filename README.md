@@ -5,7 +5,7 @@ This is a project wrapping the simdjson library for un use in Node.
 **Note** : This is a master projet and is **still in developement**. I am still woriking on some approaches to omptimze performances, but results so far seems interesting.  
 
 ## Requirements
-(to be completed). When upgraded to simdjson 3.0 (coming soon!), any computer shoud be able to run projet. Performances are a lot more interesting on computers with an SIMD architecture. 
+When upgraded to simdjson 0.3.1 (coming soon!), any computer shoud be able to run projet. Performances are a lot more interesting on computers with an SIMD architecture. 
 
 ## Getting started
 ```
@@ -77,39 +77,28 @@ try {
 Example below and more JSON Pointer uses are also available in repo under the file jsonPointer.js and can be run with ```node jsonPointer.js```
 
 ```javascript
-const twitter = 'jsonexamples/twitter.json';
-content = fs.readFileSync(twitter, 'utf-8');
-simdjsonOBJ = new simdjson(content);
+var simdjsonOBJ = new simdjson({ path : 'jsonexamples/small/cars.json' });
+console.log(simdjsonOBJ.getValue('0/tire_pressure/1'));   // outputs 39.9
 
-console.log("JSON pointer : statuses/0/id");   // outputs 505874924095815700
-console.log("JSON pointer : statuses/1/id");   // outputs 505874922023837700
-
-```
-
-```javascript
-'use strict';
-
-const fs = require('fs');
-const { simdjson } = require('bindings')('addon');
-
-const demo = 'jsonexamples/small/demo.json';
-var content = fs.readFileSync(demo, 'utf-8');
-var simdjsonOBJ = new simdjson(content);
-
-console.log("JSON pointer : Image/IDs/2");
+var simdjsonOBJ = new simdjson({ path : 'jsonexamples/small/demo.json' });
+console.log(simdjsonOBJ.getValue('Image/IDs/2'));  // outputs 234
 console.log(simdjsonOBJ.getValue('Image/Width'));  // outputs 800
 console.log(simdjsonOBJ.getValue('Image/Height')); // outputs 600
 console.log(simdjsonOBJ.getValue('Image/Width') * simdjsonOBJ.getValue('/Image/Height')); // outputs 480000
+
+simdjsonOBJ = new simdjson({ path : 'jsonexamples/twitter.json'});
+console.log(simdjsonOBJ.getValue('statuses/0/id')); // outputs 505874924095815700
 ```
 
 ## Benchmarks
-The script benchmarks.js contains the comparaison between the default JavaScript method JSON.parse and parsing with simdjson. 
-The benchmarks runs with multiple JSON file formats that are located in the jsonexamples folder. 
-To run benchmarks : ```node --expose-gc benchmarks.js```
+The script benchmarks contains multiple comparaisons between the native JavaScript JSON methods and equivalent simdjson methods (parse, length, keys, iterator and JSON Pointer). 
+The benchmarks run with multiple JSON file formats that are located in the jsonexamples folder and results output in respective files in the benchmarks folder. 
+To run benchmarks : ```npm run benchmarks```
+
+### Benchmarks results in GB/s
 
 **Note** : Parts of code have been rewritten after the publications of theses benchmarks. New benchmarks will be published soon!
 
-### Benchmarks results in GB/s
 |      File       |        JSON#parse        | simdjson#parse |
 | ------------- | ------------- |------------- |
 | apache_builds.json |       0.3508060654       |  1.2776726171       |
