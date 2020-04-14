@@ -22,7 +22,7 @@ console.log("|      Fichier       |        simdjson#length        |  unité |   
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
   file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
-  var simdjsonObj = new simdjson(file);
+  var simdjsonObj = new simdjson({path : (jsonexamplesPath + fileName)});
   var length = 0;
   for (let i = 0; i < numberOfIterations; i++) {
       try {

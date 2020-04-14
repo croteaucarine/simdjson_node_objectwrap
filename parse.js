@@ -6,7 +6,7 @@ const { simdjson } = require('bindings')('addon');
 
 const update_center = '../jsonexamples/update-center.json';
 
-var files = ['apache_builds.json', 'apache_builds.json', 'canada.json', 'citm_catalog.json', 'github_events.json', 'gsoc-2018.json', 'instruments.json', 'marine_ik.json', 'mesh.json', 'mesh.pretty.json', 'numbers.json', 'random.json', 'twitter.json', 'twitterescaped.json', 'update-center.json']
+var files = ['apache_builds.json', 'canada.json', 'citm_catalog.json', 'github_events.json', 'gsoc-2018.json', 'instruments.json', 'marine_ik.json', 'mesh.json', 'mesh.pretty.json', 'numbers.json', 'random.json', 'twitter.json', 'twitterescaped.json', 'update-center.json']
 var jsonexamplesPath = 'jsonexamples/';
 
 const numberOfIterations = 1000;

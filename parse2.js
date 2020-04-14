@@ -25,9 +25,8 @@ console.log("|      Fichier       |        simdjson#parse        |  unité |  it
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
   for (let i = 0; i < numberOfIterations; i++) {
-      file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
       var start = process.hrtime();
-      var simdjsonObj = new simdjson(file);
+      const simdjsonOBJ = new simdjson({path : (jsonexamplesPath + fileName)});
       var diff = process.hrtime(start);
       ns += diff[0] * NS_PER_SEC + diff[1];
       gc(); 
