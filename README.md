@@ -20,6 +20,9 @@ npm install
 - new simdjson(object path) : Key path must me used to send defined path as string (example : {path : 'mydoc.json'}). Creates a fully manipulable object. 
 - new simdjson(object doc) : Key path must me used to send document as string (example : {doc : docVariable}). Creates a fully manipulable object. 
 
+## Static Methods
+simdjson.isValid will be implemented soon!
+
 ## Code usage and example
 The library implements JSON parsing and basic JSON methods length and keys. It is also iterable and compatible with JSON.stringify(), Object.getOwnPropertyNames(), and Object.getOwnPropertyDescriptors(). The library also implements navigation through JSON pointer defined by the [RFC6901 standard](https://tools.ietf.org/html/rfc6901).
 
@@ -45,12 +48,6 @@ console.log(simdjsonOBJ.length);
 
 // Display strignified Object
 console.log(JSON.stringify(simdjsonOBJ));
-
-// Display Own Property Names
-console.log(Object.getOwnPropertyNames(simdjsonOBJ));
-
-// Display Own Property Descriptors
-console.log(Object.getOwnPropertyDescriptors(simdjsonOBJ));
 
 // Loop through JSON Array 
 // try-catch intercepts error if object is not an array
@@ -84,8 +81,8 @@ const twitter = 'jsonexamples/twitter.json';
 content = fs.readFileSync(twitter, 'utf-8');
 simdjsonOBJ = new simdjson(content);
 
-console.log("JSON pointer : /statuses/0/id");   // outputs 505874924095815700
-console.log("JSON pointer : /statuses/1/id");   // outputs 505874922023837700
+console.log("JSON pointer : statuses/0/id");   // outputs 505874924095815700
+console.log("JSON pointer : statuses/1/id");   // outputs 505874922023837700
 
 ```
 
@@ -99,10 +96,10 @@ const demo = 'jsonexamples/small/demo.json';
 var content = fs.readFileSync(demo, 'utf-8');
 var simdjsonOBJ = new simdjson(content);
 
-console.log("JSON pointer : /Image/IDs/2");
-console.log(simdjsonOBJ.getValue('/Image/Width'));  // outputs 800
-console.log(simdjsonOBJ.getValue('/Image/Height')); // outputs 600
-console.log(simdjsonOBJ.getValue('/Image/Width') * simdjsonOBJ.getValue('/Image/Height')); // outputs 480000
+console.log("JSON pointer : Image/IDs/2");
+console.log(simdjsonOBJ.getValue('Image/Width'));  // outputs 800
+console.log(simdjsonOBJ.getValue('Image/Height')); // outputs 600
+console.log(simdjsonOBJ.getValue('Image/Width') * simdjsonOBJ.getValue('/Image/Height')); // outputs 480000
 ```
 
 ## Benchmarks
