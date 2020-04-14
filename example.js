@@ -10,13 +10,13 @@ const simdjsonOBJ = new simdjson({path : github_events});
 //simdjsonOBJ.parse();
 
 // Display object content
-//console.log(simdjsonOBJ);
+console.log(simdjsonOBJ);
 
 // Display Object Keys
-//console.log(simdjsonOBJ.keys());
+console.log(simdjsonOBJ.keys());
 
 // Display Object length
-//console.log(simdjsonOBJ.length);
+console.log(simdjsonOBJ.length);
 
 // Display strignified Object
 console.log(JSON.stringify(simdjsonOBJ));
