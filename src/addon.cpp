@@ -5,6 +5,10 @@
 #include "../simdjson/src/simdjson.h"
 #include <chrono>
 
+#if (SIMDJSON_CPLUSPLUS < 201703L)
+#error simdjson addon requires a compiler compliant with the C++17 standard
+#endif
+
 using namespace simdjson;
 
 class simdjsonJS : public Napi::ObjectWrap<simdjsonJS>
