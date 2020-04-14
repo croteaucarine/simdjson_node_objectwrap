@@ -120,6 +120,12 @@ To run benchmarks : ```npm run benchmarks```
 **Note** : Parts of code have been rewritten after the publications of theses results. New graph will be published soon!
 ![GBPS Graph](doc/gbps.png)
 
+## Docker
+docker build -t simdjson_node_objectwrap:latest https://github.com/croteaucarine/simdjson_node_objectwrap.git
+docker run --name simdjson_node_objectwrap -d simdjson_node_objectwrap:latest 
+
+docker exec -it simdjson_node_objectwrap bash
+npm install --unsafe-perm
 
 ## License
 This code is made available under the Apache License 2.0.
