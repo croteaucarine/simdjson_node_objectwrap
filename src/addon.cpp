@@ -103,8 +103,7 @@ public:
 
         if(obj.Has("path") && obj.Get("path").IsString()) {
           std::string path = obj.Get("path").ToString();
-          std::ifstream file(path);
-          _textToParse = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+          _textToParse = get_corpus(path);
           
         } else if(obj.Has("doc") && obj.Get("doc").IsString()) {
           _textToParse = padded_string(obj.Get("doc").ToString());
@@ -113,6 +112,27 @@ public:
         }
       }
       return 0; // todo return error if params are incorrect
+  }
+
+  simdjson::padded_string get_corpus(const std::string &filename) {
+    std::FILE *fp = std::fopen(filename.c_str(), "rb");
+    if (fp != nullptr) {
+      std::fseek(fp, 0, SEEK_END);
+      size_t len = std::ftell(fp);
+      padded_string s(len);
+      if (s.data() == nullptr) {
+        std::fclose(fp);
+        return padded_string(0);
+      }
+      std::rewind(fp);
+      size_t readb = std::fread(s.data(), 1, len, fp);
+      std::fclose(fp);
+      if (readb != len) {
+        return padded_string(0);
+      }
+      return s;
+    }
+    return padded_string(0);
   }
 
   // For master purposes, for production use constructor

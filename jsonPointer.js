@@ -6,7 +6,7 @@ const { simdjson } = require('bindings')('addon');
 console.log("Cars document");
 var simdjsonOBJ = new simdjson({ path : 'jsonexamples/small/cars.json' });
 
-console.log("JSON pointer : /Image/Height");
+console.log("JSON pointer : 0/tire_pressure/1");
 console.log(simdjsonOBJ.getValue('0/tire_pressure/1'));
 
 console.log("Demo document");
