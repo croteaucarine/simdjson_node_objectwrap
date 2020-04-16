@@ -115,7 +115,6 @@ To run benchmarks : ```npm run benchmarks```
 | update-center.json |          0.9921201220       |  0.1903520690 |
 
 ## Performance results
-**Note** : Parts of code have been rewritten after the publications of theses results. New graph will be published soon!
 ![GBPS Graph](doc/gbps.png)
 
 ## Docker
