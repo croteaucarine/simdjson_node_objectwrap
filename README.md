@@ -97,29 +97,35 @@ To run benchmarks : ```npm run benchmarks```
 
 ### Benchmarks results in GB/s
 
-**Note** : Parts of code have been rewritten after the publications of theses benchmarks. New benchmarks will be published soon!
-
-|      File       |        JSON#parse        | simdjson#parse |
-| ------------- | ------------- |------------- |
-| apache_builds.json |       0.3508060654       |  1.2776726171       |
-| canada.json |       0.1411976798       | 0.6375911861       |
-| citm_catalog.json |       0.4489479678       |  0.3123227330       |
-| github_events.json |       0.3431752242       |  0.8627043830       |
-| gsoc-2018.json |       0.6820689779       |  1.2901085179       |
-| instruments.json |       0.3263017406       |  1.0613046511       |
-| marine_ik.json |       0.1985107722       |  0.5801906399       |
-| mesh.json |       0.2001960761       |  0.5928486893       |
-| mesh.pretty.json |       0.3109946339       |  0.5928486893       |
-| numbers.json |       0.2051137580       |  0.6850210674       |
-| random.json |       0.2188974147       |  0.2741147806       | 
-| twitter.json |       0.2819563119       |  0.3169782538       | 
-| twitterescaped.json |       0.2307891846       |   0.8102025150       |
-| update-center.json |       0.1986242831       |  0.2975296458       | 
+|      Fichier       |         simdjson#parse  (GB/s)      |        JSON#parse (GB/s) |
+| ------------- | ------------- | ------------- |
+| apache_builds.json |       0.6582093176       |  0.3197537729  |
+| canada.json |       0.5285019113       |  0.1369665620 |
+| citm_catalog.json |   1.3283484553       |   0.3857911551 |
+| github_events.json |      0.4011839264       |   0.3163136989 |
+| gsoc-2018.json |         1.5753144939       |  0.5841688036 |
+| instruments.json |     0.9355347016       |  0.3719788183 |
+| marine_ik.json |    0.5655987608       |  0.1880935363 |
+| mesh.json |        0.5523368471       |  0.2016259385   |
+| mesh.pretty.json |      0.7585213936       |  0.3226030418 |
+| numbers.json |      0.4698898210       |  0.2040313806 |
+| random.json |          0.8534592398       |  0.2135693655 |
+| twitter.json |          1.1542076927       |  0.2716755377 |
+| twitterescaped.json |           0.7656334327       |  0.2160604291 |
+| update-center.json |          0.9921201220       |  0.1903520690 |
 
 ## Performance results
 **Note** : Parts of code have been rewritten after the publications of theses results. New graph will be published soon!
 ![GBPS Graph](doc/gbps.png)
 
+## Docker
+```
+docker build -t simdjson_node_objectwrap:latest https://github.com/croteaucarine/simdjson_node_objectwrap.git  
+docker run --name simdjson_node_objectwrap -d simdjson_node_objectwrap:latest  
+  
+docker exec -it simdjson_node_objectwrap bash  
+npm install --unsafe-perm  
+```
 
 ## License
 This code is made available under the Apache License 2.0.
