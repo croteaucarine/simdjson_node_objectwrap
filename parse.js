@@ -9,7 +9,7 @@ const update_center = '../jsonexamples/update-center.json';
 var files = ['apache_builds.json', 'canada.json', 'citm_catalog.json', 'github_events.json', 'gsoc-2018.json', 'instruments.json', 'marine_ik.json', 'mesh.json', 'mesh.pretty.json', 'numbers.json', 'random.json', 'twitter.json', 'twitterescaped.json', 'update-center.json']
 var jsonexamplesPath = 'jsonexamples/';
 
-const numberOfIterations = 1000;
+const numberOfIterations = 10000;
 const NS_PER_MS = 1000000;
 
 var diff;
@@ -19,7 +19,7 @@ const GbSize = 1024 * 1024;
 const NS_PER_SEC = 1e9;
 
 /*************** simdjson#load & simdjson#parse ***************/
-console.log("|      Fichier       |        simdjson#constructor (s)      |        simdjson#load  (GB/s)     |        simdjson#parse  (GB/s)      |        simdjson#total   (GB/s)     |  iterations ");
+console.log("|      Fichier     | Taille  |        simdjson#constructor (s)      |        simdjson#load  (s)     |        simdjson#parse  (s)      |        simdjson#total   (GB/s)     |  iterations ");
 
 var nsConstruct = BigInt(0);
 var nsLoad = BigInt(0);
@@ -55,7 +55,7 @@ files.forEach(function(fileName){
     var ParseTimePerIterationPerSecond = (Number(nsParse) / numberOfIterations) / (NS_PER_SEC * 1.0);
     var TotalTimePerIterationPerSecond = (Number(ns) / numberOfIterations) / (NS_PER_SEC * 1.0);
     
-    console.log("| " + fileName+ " |       " + ConstuctTimePerIterationPerSecond.toFixed(10) + " |       " + ((fileInGb / LoadTimePerIterationPerSecond).toFixed(10))+ " |       " + ((fileInGb / ParseTimePerIterationPerSecond).toFixed(10)) + " |       " + ((fileInGb / TotalTimePerIterationPerSecond).toFixed(10)) + "       |  GB/s  | " + numberOfIterations);
+    console.log("| " + fileName+ " |       " + ConstuctTimePerIterationPerSecond.toFixed(10) + " |       " +  LoadTimePerIterationPerSecond.toFixed(10) + " |       " + ParseTimePerIterationPerSecond.toFixed(10) + " |       " + TotalTimePerIterationPerSecond.toFixed(10) + "       |  GB/s  | " + numberOfIterations);
     ns = BigInt(0); 
     nsConstruct = BigInt(0); 
     nsLoad = BigInt(0); 
