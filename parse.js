@@ -10,16 +10,16 @@ var files = ['apache_builds.json', 'canada.json', 'citm_catalog.json', 'github_e
 var jsonexamplesPath = 'jsonexamples/';
 
 const numberOfIterations = 10000;
-const NS_PER_MS = 1000000;
 
 var diff;
 var ns = BigInt(0);
 var file;
 const GbSize = 1024 * 1024;
 const NS_PER_SEC = 1e9;
+const NS_PER_MS = 1e6;
 
 /*************** simdjson#load & simdjson#parse ***************/
-console.log("|      Fichier     | Taille  |        simdjson#constructor (s)      |        simdjson#load  (s)     |        simdjson#parse  (s)      |        simdjson#total   (GB/s)     |  iterations ");
+console.log("|   Fichier   | Taille  |  simdjson#constructor (ms)  |    simdjson#load (ms)    |    simdjson#parse (ms)    |    simdjson#total (ms)    |  iterations ");
 
 var nsConstruct = BigInt(0);
 var nsLoad = BigInt(0);
@@ -50,12 +50,12 @@ files.forEach(function(fileName){
       gc(); 
     }
     var fileInGb = fileSize / GbSize;
-    var ConstuctTimePerIterationPerSecond = (Number(nsConstruct) / numberOfIterations) / (NS_PER_SEC * 1.0);
-    var LoadTimePerIterationPerSecond = (Number(nsLoad) / numberOfIterations) / (NS_PER_SEC * 1.0);
-    var ParseTimePerIterationPerSecond = (Number(nsParse) / numberOfIterations) / (NS_PER_SEC * 1.0);
-    var TotalTimePerIterationPerSecond = (Number(ns) / numberOfIterations) / (NS_PER_SEC * 1.0);
+    var ConstuctTimePerIterationPerSecond = (Number(nsConstruct) / numberOfIterations) / (NS_PER_MS * 1.0);
+    var LoadTimePerIterationPerSecond = (Number(nsLoad) / numberOfIterations) / (NS_PER_MS * 1.0);
+    var ParseTimePerIterationPerSecond = (Number(nsParse) / numberOfIterations) / (NS_PER_MS * 1.0);
+    var TotalTimePerIterationPerSecond = (Number(ns) / numberOfIterations) / (NS_PER_MS * 1.0);
     
-    console.log("| " + fileName+ " |       " + ConstuctTimePerIterationPerSecond.toFixed(10) + " |       " +  LoadTimePerIterationPerSecond.toFixed(10) + " |       " + ParseTimePerIterationPerSecond.toFixed(10) + " |       " + TotalTimePerIterationPerSecond.toFixed(10) + "       |  GB/s  | " + numberOfIterations);
+    console.log("| " + fileName + " | " + fileSize + " |   " + ConstuctTimePerIterationPerSecond.toFixed(10) + " |    " +  LoadTimePerIterationPerSecond.toFixed(10) + " |   " + ParseTimePerIterationPerSecond.toFixed(10) + " |   " + TotalTimePerIterationPerSecond.toFixed(10) + "   |  GB/s  | " + numberOfIterations);
     ns = BigInt(0); 
     nsConstruct = BigInt(0); 
     nsLoad = BigInt(0); 
@@ -91,7 +91,9 @@ console.log("|      Fichier       |        JSON#parse        | unité |  iterati
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
   for (let i = 0; i < numberOfIterations; i++) {
+      var startLoad = process.hrtime.bigint();
       file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
+      var endLoad = process.hrtime.bigint();
       var start = process.hrtime.bigint();
       var JSONObj = JSON.parse(file);
       var end = process.hrtime.bigint();
