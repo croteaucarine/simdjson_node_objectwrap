@@ -4,7 +4,7 @@ const fs = require('fs');
 const { simdjson } = require('bindings')('addon');
 
 const github_events = 'jsonexamples/github_events.json';
-//const simdjsonOBJ = new simdjson({path : github_events});
+
 const simdjsonOBJ = new simdjson({path : github_events});
 //simdjsonOBJ.load({path : github_events});
 //simdjsonOBJ.parse();
@@ -19,15 +19,7 @@ console.log(simdjsonOBJ.keys());
 console.log(simdjsonOBJ.length);
 
 // Display strignified Object
-console.log(JSON.stringify(simdjsonOBJ));
-
-// Display Own Property Names
-// Todo:
-//console.log(Object.getOwnPropertyNames(simdjsonOBJ));
-
-// Display Own Property Descriptors
-// Todo:
-//console.log(Object.getOwnPropertyDescriptors(simdjsonOBJ));
+//console.log(JSON.stringify(simdjsonOBJ));
 
 // Loop through JSON Array 
 // try-catch intercepts error if object is not an array

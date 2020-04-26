@@ -18,65 +18,43 @@ public:
   {
     constructor.Value().Delete("jsObject");
     constructor.Value().Delete("keys");
-    constructor.Value().Delete("arrayLength");
     constructor.Value().Delete("ToStringTag");
-    
-    /*std::chrono::steady_clock::time_point startGetFile;
-    std::chrono::steady_clock::time_point endGetFile;
-    std::chrono::steady_clock::time_point startAlloc;
-    std::chrono::steady_clock::time_point endAlloc;
-    std::chrono::steady_clock::time_point startParse;
-    std::chrono::steady_clock::time_point endParse;*/
-
-    //std::chrono::steady_clock::time_point  start = std::chrono::steady_clock::now();
     
     if(info.Length() == 1)
     {
       
       const Napi::Value objectToLoad = info[0];
-      dom::parser parser;
+      //dom::parser parser;
 
       if(objectToLoad.IsString()) {
         // String passed is considered as JSON Document
-        parser.parse(padded_string(objectToLoad.ToString()));
-        _document = std::move(parser.doc);
+        _parser.parse(padded_string(objectToLoad.ToString()));
       } else if (objectToLoad.IsObject()) {
         Napi::Object obj = objectToLoad.As<Napi::Object>();
 
         if(obj.Has("path") && obj.Get("path").IsString()) {
-          parser.load(obj.Get("path").ToString());
-          _document = std::move(parser.doc);
+          _parser.load(obj.Get("path").ToString());
 
         } else if(obj.Has("doc") && obj.Get("doc").IsString()) {
-          parser.parse(padded_string(obj.Get("doc").ToString()));
-          _document = std::move(parser.doc);
+          _parser.parse(padded_string(obj.Get("doc").ToString()));
         } else {
           // Throw error : Object is missing parameter path or doc
+          //Napi::Error::New(info.Env(), "missing parameter path or doc").ThrowAsJavaScriptException();
         }
+
+        try {
+          if(_parser.doc.root().type() == dom::element_type::ARRAY) {
+            info.This().As<Napi::Object>().DefineProperty(
+            Napi::PropertyDescriptor::Value("length",
+                                            Napi::Number::From(info.Env(),  dom::array(_parser.doc.root()).size()), napi_enumerable));
+    
+          }
+        } catch(const std::exception& e) {}
       }
-
-      //startGetFile = std::chrono::steady_clock::now();
-
-      
-      //endGetFile = std::chrono::steady_clock::now();
-      /*if (res != 0)
-      {
-        Napi::Error::New(env, "Error parsing:" + simdjson::error_message(res)).ThrowAsJavaScriptException();
-      }*/
-      
-      /*else
-      {
-        Napi::Error::New(env, "Error allocating memory:").ThrowAsJavaScriptException();
-      }(*/
     } else if(info.Length() > 1) 
     {
       //Todo:throw error
     }
-    //auto end = std::chrono::steady_clock::now();
-    /*std::cout << "Getting parameter time : "  << std::chrono::duration_cast<std::chrono::nanoseconds>(endGetFile - startGetFile).count() << std::endl;
-    std::cout << "Allocation time : "  << std::chrono::duration_cast<std::chrono::nanoseconds>(endAlloc - startAlloc).count() << std::endl;
-    std::cout << "Parse time : "  << std::chrono::duration_cast<std::chrono::nanoseconds>(endParse - startParse).count() << std::endl;
-    std::cout << "Constructor time: "  << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;*/
   }
 
   void Load(const Napi::CallbackInfo& info) {
@@ -92,7 +70,6 @@ public:
 
   // For master purposes, for production use constructor
   int Load(const Napi::Value objectToLoad) {
-    dom::parser parser;
     // Todo gérer exceptions si le paramètre est incorrect
       if(objectToLoad.IsString()) {
         // String passed is considered as JSON Document
@@ -150,18 +127,8 @@ public:
 
   // For master purposes, for production use constructor
   int Parse() {
-    //std::chrono::steady_clock::time_point  start = std::chrono::steady_clock::now();
-
-    // todo : check if a doc is loaded. 
-
     dom::parser parser;
-    parser.parse(_textToParse);
-    _document = std::move(parser.doc);
-
-    //std::chrono::steady_clock::time_point  end = std::chrono::steady_clock::now();
-
-    //std::cout << "c++ Parse time : "  << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
-    
+    _parser.parse(_textToParse);
 
     return 0; // todo: return error or success
   }
@@ -178,7 +145,7 @@ public:
     std::string parsedJSONToString = "";
     
     if (!constructor.Value().Has("ToStringTag")) {
-      parsedJSONToString = "\n" + ParsedJSONToString(_document.root(), "");
+      parsedJSONToString = "\n" + ParsedJSONToString(_parser.doc.root(), "");
       constructor.Value().Set("ToStringTag", Napi::String::From(env, parsedJSONToString));
     }
 
@@ -250,7 +217,7 @@ public:
   {
     std::string parsedJSONToString = "";
     Napi::Array array = Napi::Array::New(env);
-    dom::element element = _document.root();
+    dom::element element = _parser.doc.root();
 
     int i = 0;
     if (!constructor.Value().Has("keys"))
@@ -295,38 +262,6 @@ public:
     return constructor.Value().Get("keys");
   }
 
-  //Length
-  Napi::Value Length(const Napi::CallbackInfo &info)
-  {
-    Napi::Env env = info.Env();
-    if (!constructor.Value().Has("arrayLength")) {
-      dom::element element = _document.root();
-      { // calculate only if not already calculated to improve performances on multiple calls
-        if (element.type() == dom::element_type::ARRAY)
-        {
-          int i = 0;
-          /*for (dom::element child : dom::array(element)) {
-            i++;
-          }*/
-          dom::array arrayElements = dom::array(element);
-          dom::array::iterator it = arrayElements.begin();
-          while(it != arrayElements.end()) {
-              i++;
-              it.operator++();
-          }
-
-          // Todo optimiser lengtH (https://github.com/simdjson/simdjson/pull/690/commits/de8950014b9def4cbf5dd80705153bdf56e94ba4)
-          constructor.Value().Set("arrayLength", Napi::Number::From(env, i));
-        }
-        else
-        {
-          constructor.Value().Set("arrayLength", env.Undefined());
-        }
-      }
-    }
-    return constructor.Value().Get("arrayLength");
-  }
-
   Napi::Value GetValue(const Napi::CallbackInfo &info)
   {
     Napi::Env env = info.Env();
@@ -346,7 +281,7 @@ public:
       std::string jsonPointer = info[0].As<Napi::String>();
 
       try {
-        return makeJSONObject1Depth(env, _document.root().at(jsonPointer));
+        return makeJSONObject1Depth(env, _parser.doc.root().at(jsonPointer));
       } catch (const std::exception& e) {
         Napi::Error::New(env, e.what()).ThrowAsJavaScriptException();
         return Napi::Value(env, env.Null()); 
@@ -354,28 +289,12 @@ public:
     }
   }
 
-  // todo: implémenter les foncitons de tableau
-  // Array.prototype.filter() : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
-  // Array.isArray() : bool : vraiment facile
-  // Array.prototype.find() : The find() method returns the value of the first element in the provided array that satisfies the provided testing function.
-  // Array.prototype.every() : The every() method tests whether all elements in the array pass the test implemented by the provided function. It returns a Boolean value.
-  // Array.prototype.some() : The some() method tests whether at least one element in the array passes the test implemented by the provided function. It returns a Boolean value.
-  // Array.prototype.map() : The map() method creates a new array with the results of calling a provided function on every element in the calling array.
-  // Array.prototype.reduce() : The reduce() method executes a reducer function (that you provide) on each element of the array, resulting in a single output value.
-  // Array.sort?
-
-  // Object.values()
-  // Object.getOwnPropertyDescriptor() : La méthode Object.getOwnPropertyDescriptor() renvoie un descripteur de la propriété propre d'un objet (c'est-à-dire une propriété directement présente et pas héritée via la chaîne de prototypes).
-  // La méthode Object.values() renvoie un tableau contenant les valeurs des propriétés propres énumérables d'un objet dont l'ordre est le même que celui obtenu avec une boucle for...in (la boucle for-in est différente car elle parcourt également les propriétés héritées).
-
-  // Idée : Partir un thread à chaque appel recursif ou appeler une fonction asynchrone?
-  // https://stackoverflow.com/questions/32560290/c-thread-with-a-recursive-function
   void SetJSObjects(Napi::Env env) {
     if (!constructor.Value().Has("jsObject"))
     {
       std::string parsedJSONToString = "";
       Napi::Array jsArray;
-      dom::element element = _document.root();
+      dom::element element = _parser.doc.root();
       int i = 0;
 
       switch(element.type()) {
@@ -389,7 +308,6 @@ public:
             i++;
           }
           constructor.Value().Set("jsObject", jsArray);
-          constructor.Value().Set("arrayLength", i);       // Profiter de l'opportunité pour définir la propriété length
           break;
         case dom::element_type::INT64:
           constructor.Value().Set("jsObject", Napi::Number::New(env, int64_t(element)));
@@ -416,7 +334,7 @@ public:
   Napi::Value Iterator(const Napi::CallbackInfo &info)
   {
     Napi::Env env = info.Env();
-    dom::element element = _document.root();
+    dom::element element = _parser.doc.root();
 
     if (element.type() == dom::element_type::ARRAY)
     {
@@ -621,7 +539,6 @@ public:
       InstanceMethod("load", &simdjsonJS::Load, napi_enumerable), 
       InstanceMethod("parse", &simdjsonJS::Parse, napi_enumerable), 
       InstanceMethod("keys", &simdjsonJS::Keys, napi_enumerable), 
-      InstanceAccessor("length", &simdjsonJS::Length, nullptr, napi_enumerable),
 
       // conventions
       InstanceMethod("toJSON", &simdjsonJS::toJSON, napi_enumerable), 
@@ -648,7 +565,7 @@ public:
 
 private:
   simdjson::padded_string _textToParse;
-  dom::document _document;
+  dom::parser _parser;
   static Napi::FunctionReference constructor;
 };
 

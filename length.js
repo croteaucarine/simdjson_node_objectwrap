@@ -11,6 +11,7 @@ const numberOfIterations = 1000;
 var file;
 const GbSize = 1024 * 1024;
 const NS_PER_MS = 1000000;
+var individualTimes = "";
 
 var start;
 var diff;
@@ -22,14 +23,16 @@ console.log("|      Fichier       |        simdjson#length        |  unité |   
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
   file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
-  var simdjsonObj = new simdjson({path : (jsonexamplesPath + fileName)});
-  var length = 0;
+  
   for (let i = 0; i < numberOfIterations; i++) {
       try {
+        var simdjsonObj = new simdjson({path : (jsonexamplesPath + fileName)});
+        var length = 0;
         start = process.hrtime();
         length = simdjsonObj.length;
         diff = process.hrtime(start);
         ns += diff[0] * NS_PER_MS + diff[1];
+        individualTimes += (diff[0] * NS_PER_MS + diff[1]) + ";";
         
       } catch(error) {
         console.log("error" + error);
@@ -39,7 +42,8 @@ files.forEach(function(fileName){
     }
 
     console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + length);
-    
+    //console.log(individualTimes);
+    individualTimes = "";
     ns = 0; 
 });
 

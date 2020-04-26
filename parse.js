@@ -9,7 +9,7 @@ const update_center = '../jsonexamples/update-center.json';
 var files = ['apache_builds.json', 'canada.json', 'citm_catalog.json', 'github_events.json', 'gsoc-2018.json', 'instruments.json', 'marine_ik.json', 'mesh.json', 'mesh.pretty.json', 'numbers.json', 'random.json', 'twitter.json', 'twitterescaped.json', 'update-center.json']
 var jsonexamplesPath = 'jsonexamples/';
 
-const numberOfIterations = 10000;
+const numberOfIterations = 1000;
 
 var diff;
 var ns = BigInt(0);
@@ -18,54 +18,34 @@ const GbSize = 1024 * 1024;
 const NS_PER_SEC = 1e9;
 const NS_PER_MS = 1e6;
 
-/*************** simdjson#load & simdjson#parse ***************/
-console.log("|   Fichier   | Taille  |  simdjson#constructor (ms)  |    simdjson#load (ms)    |    simdjson#parse (ms)    |    simdjson#total (ms)    |  iterations ");
+/*************** simdjson#load & simdjson#parseAfterObjectLoaded ***************/
+console.log("|   Fichier   | Taille  |   simdjson#parseAfterObjectLoaded    | unité | iterations ");
 
-var nsConstruct = BigInt(0);
-var nsLoad = BigInt(0);
-var nsParse = BigInt(0);
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
   for (let i = 0; i < numberOfIterations; i++) {
-      var start = process.hrtime.bigint();
-      var startConstruct = process.hrtime.bigint();
       var simdjsonObj = new simdjson();
-      var endConstruct = process.hrtime.bigint();
-
-      var startLoad = process.hrtime.bigint();
       simdjsonObj.load({path : (jsonexamplesPath + fileName)});
-      var endLoad = process.hrtime.bigint();
       
-      var startParse = process.hrtime.bigint();
+      var start = process.hrtime.bigint();
       simdjsonObj.parse();
-      var endParse = process.hrtime.bigint();
-
       var end = process.hrtime.bigint();
-
       ns += (end-start);
-      nsConstruct += (endConstruct-startConstruct);
-      nsLoad += (endLoad-startLoad);
-      nsParse += (endParse-startParse);
-      //console.log(ns);
+
       gc(); 
     }
     var fileInGb = fileSize / GbSize;
-    var ConstuctTimePerIterationPerSecond = (Number(nsConstruct) / numberOfIterations) / (NS_PER_MS * 1.0);
-    var LoadTimePerIterationPerSecond = (Number(nsLoad) / numberOfIterations) / (NS_PER_MS * 1.0);
-    var ParseTimePerIterationPerSecond = (Number(nsParse) / numberOfIterations) / (NS_PER_MS * 1.0);
-    var TotalTimePerIterationPerSecond = (Number(ns) / numberOfIterations) / (NS_PER_MS * 1.0);
+    var timePerIteration = Number(ns) / numberOfIterations;
+    var timePerIterationPerSecond = timePerIteration / (NS_PER_SEC * 1.0);
     
-    console.log("| " + fileName + " | " + fileSize + " |   " + ConstuctTimePerIterationPerSecond.toFixed(10) + " |    " +  LoadTimePerIterationPerSecond.toFixed(10) + " |   " + ParseTimePerIterationPerSecond.toFixed(10) + " |   " + TotalTimePerIterationPerSecond.toFixed(10) + "   |  GB/s  | " + numberOfIterations);
+    console.log("| " + fileName + " |       " + ((fileInGb / timePerIterationPerSecond).toFixed(10)) + "       |  GB/s  | " + numberOfIterations);
     ns = BigInt(0); 
-    nsConstruct = BigInt(0); 
-    nsLoad = BigInt(0); 
-    nsParse = BigInt(0); 
 });
 
 console.log();
 
-/*************** simdjson#load&parse ***************/
-console.log("|      Fichier       |        simdjson#parse        |  unité |  iterations ");
+/*************** simdjson#parseWithPath ***************/
+console.log("|      Fichier       |        simdjson#parseWithPath        |  unité |  iterations ");
 
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
@@ -85,6 +65,31 @@ files.forEach(function(fileName){
 });
 
 console.log();
+
+/*************** simdjson#parseWithString ***************/
+console.log("|      Fichier       |        simdjson#parseWithString        |  unité |  iterations ");
+
+files.forEach(function(fileName){
+  var fileSize = getFileSize(jsonexamplesPath + fileName);
+  for (let i = 0; i < numberOfIterations; i++) {
+      var start = process.hrtime.bigint();
+      file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
+      var simdjsonObj = new simdjson(file);
+      var end = process.hrtime.bigint();
+      ns += (end-start);
+      gc(); 
+    }
+    var fileInGb = fileSize / GbSize;
+    var timePerIteration = Number(ns) / numberOfIterations;
+    var timePerIterationPerSecond = timePerIteration / (NS_PER_SEC * 1.0);
+    
+    console.log("| " + fileName + " |       " + ((fileInGb / timePerIterationPerSecond).toFixed(10)) + "       |  GB/s  | " + numberOfIterations);
+    ns = BigInt(0); 
+});
+
+console.log();
+
+
 
 /*************** JSON#parse ***************/
 console.log("|      Fichier       |        JSON#parse        | unité |  iterations");
