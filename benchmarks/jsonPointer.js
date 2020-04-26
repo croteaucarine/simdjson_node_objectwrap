@@ -11,7 +11,7 @@ var start;
 var diff;
 var end;
 var ns = 0;
-var jsonexamplesPath = '../jsonexamples/';
+var jsonexamplesPath = './jsonexamples/';
 
 const tests = [
     { file: 'small/cars.json', query: '0/tire_pressure/1', output:null, timeInMs:null },

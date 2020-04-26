@@ -7,15 +7,17 @@
   "gypfile": true,
   "dependencies": {
     "bindings": "^1.5.0",
+    "colors": "^1.4.0",
+    "json-pointer": "^0.6.0",
     "node-addon-api": "*",
     "readline-sync": "^1.4.10"
   },
   "scripts": {
     "benchmarks": "npm run benchmarks::parse && npm run benchmarks::iterator && npm run benchmarks::keys && npm run benchmarks::length && npm run benchmarks::jsonPointer",
-    "benchmarks::parse": "node --expose-gc parse.js > benchmarks/parse.txt; ",
-    "benchmarks::iterator": "node --expose-gc iterator.js > benchmarks/iterator.txt;",
-    "benchmarks::keys": "node --expose-gc keys.js > benchmarks/keys.txt;",
-    "benchmarks::length": "node --expose-gc length.js > benchmarks/length.txt;",
-    "benchmarks::jsonPointer": "node --expose-gc length.js > benchmarks/length.txt;"
+    "benchmarks::parse": "node --expose-gc benchmarks/parse.js > benchmarks/results/parse.txt; ",
+    "benchmarks::iterator": "node --expose-gc benchmarks/iterator.js > benchmarks/results/iterator.txt;",
+    "benchmarks::keys": "node --expose-gc benchmarks/keys.js > benchmarks/results/keys.txt;",
+    "benchmarks::length": "node --expose-gc benchmarks/length.js > benchmarks/results/length.txt;",
+    "benchmarks::jsonPointer": "node --expose-gc benchmarks/jsonPointer.js > benchmarks/results/jsonPointer.txt;"
   }
 }

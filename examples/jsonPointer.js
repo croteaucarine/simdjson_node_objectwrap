@@ -6,7 +6,7 @@ const colors = require('colors');
 
 console.log(colors.blue("Cars document"));
 console.log("");
-var simdjsonOBJ = new simdjson({ path : '../jsonexamples/small/cars.json' });
+var simdjsonOBJ = new simdjson({ path : './jsonexamples/small/cars.json' });
 
 console.log("JSON pointer : 0/tire_pressure/1");
 console.log(simdjsonOBJ.getValue('0/tire_pressure/1'));
@@ -16,7 +16,7 @@ console.log("");
 console.log(colors.blue("Demo document"));
 console.log("");
 
-var simdjsonOBJ = new simdjson({ path : '../jsonexamples/small/demo.json' });
+var simdjsonOBJ = new simdjson({ path : './jsonexamples/small/demo.json' });
 
 console.log("JSON pointer : Image/Width");
 console.log(simdjsonOBJ.getValue('Image/Width'));
@@ -37,7 +37,7 @@ console.log("");
 console.log("");
 console.log(colors.blue("Numbers document"));
 console.log("");
-simdjsonOBJ = new simdjson({ path : '../jsonexamples/numbers.json'});
+simdjsonOBJ = new simdjson({ path : './jsonexamples/numbers.json'});
 
 console.log("JSON pointer : 0");
 console.log(simdjsonOBJ.getValue('0'));
@@ -58,7 +58,7 @@ console.log("");
 console.log("");
 console.log(colors.blue("Twitter document"));
 console.log("");
-simdjsonOBJ = new simdjson({ path : '../jsonexamples/twitter.json'});
+simdjsonOBJ = new simdjson({ path : './jsonexamples/twitter.json'});
 
 console.log("JSON pointer : statuses/0/id");
 console.log(simdjsonOBJ.getValue('statuses/0/id'));
