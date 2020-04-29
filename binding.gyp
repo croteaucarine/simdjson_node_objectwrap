@@ -22,14 +22,14 @@
           'cflags!': [ '-fno-exceptions' ],
           'cflags_cc!': [ '-fno-exceptions' ],
           'cflags_c': [ "-mavx2", "-mavx" ],
-          "cflags_cc": [ "-mavx2", "-mavx", "mavx", "-mbmi", "-mpclmul", "-std=c++17", "-O3"],
+          "cflags_cc": [ "-mavx2", "-mavx", "-mbmi", "-mpclmul", "-std=c++17", "-O3"],
         }],
         ["OS=='win'", {
           'msvs_settings': {
             'VCCLCompilerTool': { 'ExceptionHandling': 1 },
           }, 
           'cflags_c': [ "-mavx2", "-mavx" ],
-          "cflags_cc": [ "-mavx2", "-mavx", "mavx", "-mbmi", "-mpclmul", "-std=c++17", "-O3"],
+          "cflags_cc": [ "-mavx2", "-mavx", "-mbmi", "-mpclmul", "-std=c++17", "-O3"],
         }]
       ]
     }
