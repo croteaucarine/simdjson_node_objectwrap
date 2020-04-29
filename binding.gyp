@@ -8,30 +8,21 @@
         ],
       'include_dirs': ["<!@(node -p \"require('node-addon-api').include\")"],
       'dependencies': ["<!(node -p \"require('node-addon-api').gyp\")"],
-      "conditions": [
-        ["OS=='mac'", {          
-          "xcode_settings": {
-            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
-            'CLANG_CXX_LIBRARY': 'libc++',
-            'MACOSX_DEPLOYMENT_TARGET': '10.7',
-            "CLANG_X86_VECTOR_INSTRUCTIONS": "avx2",
-            "OTHER_CFLAGS": ["-mavx2", "-mavx", "-mbmi", "-mpclmul", "-std=c++17", "-O3"],          
-          }
-        }],
-        ["OS=='linux'", {          
-          'cflags!': [ '-fno-exceptions' ],
-          'cflags_cc!': [ '-fno-exceptions' ],
-          'cflags_c': [ "-mavx2", "-mavx" ],
-          "cflags_cc": [ "-mavx2", "-mavx", "-mbmi", "-mpclmul", "-std=c++17", "-O3"],
-        }],
-        ["OS=='win'", {
-          'msvs_settings': {
-            'VCCLCompilerTool': { 'ExceptionHandling': 1 },
-          }, 
-          'cflags_c': [ "-mavx2", "-mavx" ],
-          "cflags_cc": [ "-mavx2", "-mavx", "-mbmi", "-mpclmul", "-std=c++17", "-O3"],
-        }]
-      ]
+      "default_configuration": "Release",
+      "cflags!": ["-fno-exceptions"],
+      "cflags_cc!": ["-O3", "-fno-exceptions", "-std=gnu++0x", "-std=gnu++1y"],
+      "cflags_cc+": ["-O3", "-std=c++17"],
+      "xcode_settings": {
+        "OTHER_CFLAGS": ["-std=c++17"],
+        "GCC_ENABLE_CPP_EXCEPTIONS": "YES"
+      },
+      "msvs_settings": {
+        "VCCLCompilerTool": {
+          "AdditionalOptions": ["/std:c++17"]
+        }
+      },
+      "include_dirs": ["<!@(node -p \"require('node-addon-api').include\")"],
+      "defines": ["NAPI_CPP_EXCEPTIONS"]
     }
   ]
 }
