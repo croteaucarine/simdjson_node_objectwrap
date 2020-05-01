@@ -14,10 +14,10 @@
   },
   "scripts": {
     "benchmarks": "npm run benchmarks::parse && npm run benchmarks::iterator && npm run benchmarks::keys && npm run benchmarks::length && npm run benchmarks::jsonPointer",
-    "benchmarks::parse": "node --expose-gc benchmarks/parse.js > benchmarks/results/parse.txt; ",
-    "benchmarks::iterator": "node --expose-gc benchmarks/iterator.js > benchmarks/results/iterator.txt;",
-    "benchmarks::keys": "node --expose-gc benchmarks/keys.js > benchmarks/results/keys.txt;",
-    "benchmarks::length": "node --expose-gc benchmarks/length.js > benchmarks/results/length.txt;",
-    "benchmarks::jsonPointer": "node --expose-gc benchmarks/jsonPointer.js > benchmarks/results/jsonPointer.txt;"
+    "benchmarks::parse": "node --expose-gc benchmarks/parse.js;",
+    "benchmarks::iterator": "node --expose-gc benchmarks/iterator.js;",
+    "benchmarks::keys": "node --expose-gc benchmarks/keys.js",
+    "benchmarks::length": "node --expose-gc benchmarks/length.js;",
+    "benchmarks::jsonPointer": "node --expose-gc benchmarks/jsonPointer.js;"
   }
 }

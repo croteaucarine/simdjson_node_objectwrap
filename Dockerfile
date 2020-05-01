@@ -1,6 +1,6 @@
 # docker build -t simdjson_node_objectwrap:latest -f- https://github.com/croteaucarine/simdjson_node_objectwrap.git
 
-FROM gcc:9.3
+FROM gcc:8.3
 
 USER root
 
@@ -15,6 +15,8 @@ COPY package.json package.json
 
 COPY . .
 
+RUN npm install --unsafe-perm
+RUN npm run benchmarks
 
 CMD tail -f /dev/null
 
