@@ -1,7 +1,5 @@
-# docker build -t simdjson_node_objectwrap . && docker run --privileged -t simdjson_node_objectwrap
+# docker build -t simdjson_node_objectwrap . 
 FROM gcc:9.3
-
-USER root
 
 RUN apt-get update
 RUN apt-get -y install curl gnupg
