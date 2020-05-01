@@ -1,6 +1,5 @@
-# docker build -t simdjson_node_objectwrap:latest -f- https://github.com/croteaucarine/simdjson_node_objectwrap.git
-
-FROM gcc:8.3
+# docker build -t simdjson_node_objectwrap . && docker run --privileged -t simdjson_node_objectwrap
+FROM gcc:9.3
 
 USER root
 
