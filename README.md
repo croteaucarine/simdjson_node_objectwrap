@@ -24,10 +24,10 @@ npm install
 simdjson.isValid will be implemented soon!
 
 ## Code usage and example
-The library implements JSON parsing and basic JSON methods length and keys. It is also iterable and compatible with JSON.stringify(), Object.getOwnPropertyNames(), and Object.getOwnPropertyDescriptors(). The library also implements navigation through JSON pointer defined by the [RFC6901 standard](https://tools.ietf.org/html/rfc6901).
+The library implements JSON parsing and basic JSON methods length, keys and iterator. The library also implements navigation through JSON pointer defined by the [RFC6901 standard](https://tools.ietf.org/html/rfc6901).
 
 ### Basic usage example
-Example below is also available in repo under the file example.js and can be run with ```node example.js```
+Example below is also available in repo under the folder examples and can be run with ```node examples/basic_usage.js```
 
 ```javascript
 'use strict';
@@ -74,7 +74,7 @@ try {
 ```
 
 ### JSON Pointer example ([JavaScript Object Notation (JSON) Pointer (RFC 6901)](https://tools.ietf.org/html/rfc6901))
-Example below and more JSON Pointer uses are also available in repo under the file jsonPointer.js and can be run with ```node jsonPointer.js```
+Example below and more JSON Pointer uses are also available in repo under the file jsonPointer.js and can be run with ```node examples/jsonPointer.js```
 
 ```javascript
 var simdjsonOBJ = new simdjson({ path : 'jsonexamples/small/cars.json' });
@@ -119,11 +119,7 @@ To run benchmarks : ```npm run benchmarks```
 
 ## Docker
 ```
-docker build -t simdjson_node_objectwrap:latest https://github.com/croteaucarine/simdjson_node_objectwrap.git  
-docker run --name simdjson_node_objectwrap -d simdjson_node_objectwrap:latest  
-  
-docker exec -it simdjson_node_objectwrap bash  
-npm install --unsafe-perm  
+docker build -t docker build -t simdjson_node_objectwrap . 
 ```
 
 ## License
