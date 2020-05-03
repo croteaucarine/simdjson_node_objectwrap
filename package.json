@@ -20,6 +20,6 @@
     "benchmarks::length": "node --expose-gc benchmarks/length.js;",
     "benchmarks::jsonPointer": "node --expose-gc benchmarks/jsonPointer.js;",
     "benchmarks::keys_detailed": "node --expose-gc benchmarks/keys_detailed.js;",
-    "benchmarks::iterator_detailed": "node --expose-gc benchmarks/keys_detailed.js;"
+    "benchmarks::iterator_detailed": "node --expose-gc benchmarks/iterator_detailed.js;"
   }
 }
