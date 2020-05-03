@@ -13,11 +13,13 @@
     "readline-sync": "^1.4.10"
   },
   "scripts": {
-    "benchmarks": "npm run benchmarks::parse && npm run benchmarks::iterator && npm run benchmarks::keys && npm run benchmarks::length && npm run benchmarks::jsonPointer",
+    "benchmarks": "npm run benchmarks::parse && npm run benchmarks::iterator && npm run benchmarks::keys && npm run benchmarks::length && npm run benchmarks::jsonPointer && npm run benchmarks::keys_detailed && npm run benchmarks::iterator_detailed",
     "benchmarks::parse": "node --expose-gc benchmarks/parse.js;",
     "benchmarks::iterator": "node --expose-gc benchmarks/iterator.js;",
     "benchmarks::keys": "node --expose-gc benchmarks/keys.js",
     "benchmarks::length": "node --expose-gc benchmarks/length.js;",
-    "benchmarks::jsonPointer": "node --expose-gc benchmarks/jsonPointer.js;"
+    "benchmarks::jsonPointer": "node --expose-gc benchmarks/jsonPointer.js;",
+    "benchmarks::keys_detailed": "node --expose-gc benchmarks/keys_detailed.js;",
+    "benchmarks::iterator_detailed": "node --expose-gc benchmarks/keys_detailed.js;"
   }
 }
