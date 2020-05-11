@@ -7,7 +7,7 @@ const { simdjson } = require('bindings')('addon');
 var files = ['apache_builds.json', 'canada.json', 'citm_catalog.json', 'github_events.json', 'gsoc-2018.json', 'instruments.json', 'marine_ik.json', 'mesh.json', 'mesh.pretty.json', 'numbers.json', 'random.json', 'twitter.json', 'twitterescaped.json', 'update-center.json']
 var jsonexamplesPath = './jsonexamples/';
 
-const numberOfIterations = 1000;
+const numberOfIterations = 1;
 var file;
 const NS_PER_MS = 1000000;
 
@@ -91,7 +91,7 @@ files.forEach(function(fileName) {
   }
 
   console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50)+ "...");
-  
+  console.log(keys.toString());
   ns = 0; 
 });
 
@@ -119,6 +119,7 @@ files.forEach(function(fileName) {
   }
 
   console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50) + "...");
+  console.log(keys.toString());
   
   ns = 0; 
 

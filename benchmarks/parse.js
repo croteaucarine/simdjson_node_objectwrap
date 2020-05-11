@@ -16,8 +16,9 @@ const GbSize = 1024 * 1024;
 const NS_PER_SEC = 1e9;
 const NS_PER_MS = 1e6;
 
+
+console.log("| Méthode |   Fichier   | Taille  |   (ms)   |  (GB/s)  | iterations ");
 /*************** simdjson#load & simdjson#parseAfterObjectLoaded ***************/
-console.log("|   Fichier   | Taille  |   simdjson#parseAfterObjectLoaded  (ms)   | simdjson#parseAfterObjectLoaded  (GB/s)  | iterations ");
 
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
@@ -35,14 +36,13 @@ files.forEach(function(fileName){
     var fileInGb = fileSize / GbSize;
     var timePerIteration = Number(ns) / numberOfIterations;
     
-    console.log("| " + fileName + "|" + fileInGb + " |  " + timePerIteration / (NS_PER_MS * 1.0) + " | " + fileInGb / (timePerIteration / (NS_PER_SEC * 1.0)).toFixed(10) + " | " + numberOfIterations);
+    console.log("| simdjson#parseAfterObjectLoaded | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
     ns = BigInt(0); 
 });
 
 console.log();
 
 /*************** simdjson#parseWithPath ***************/
-console.log("|   Fichier   | Taille  |   simdjson#parseWithPath  (ms)   | simdjson#parseWithPath  (GB/s)  | iterations ");
 
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
@@ -56,14 +56,13 @@ files.forEach(function(fileName){
     var fileInGb = fileSize / GbSize;
     var timePerIteration = Number(ns) / numberOfIterations;
     
-    console.log("| " + fileName + "|" + fileInGb + " |  " + timePerIteration / (NS_PER_MS * 1.0) + " | " + fileInGb / (timePerIteration / (NS_PER_SEC * 1.0)).toFixed(10) + " | " + numberOfIterations);
+    console.log("| simdjson#parseWithPath | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
     ns = BigInt(0); 
 });
 
 console.log();
 
 /*************** simdjson#parseWithString ***************/
-console.log("|   Fichier   | Taille  |   simdjson#parseWithString  (ms)   | simdjson#parseWithString  (GB/s)  | iterations ");
 
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
@@ -78,15 +77,14 @@ files.forEach(function(fileName){
     var fileInGb = fileSize / GbSize;
     var timePerIteration = Number(ns) / numberOfIterations;
     
-    console.log("| " + fileName + "|" + fileInGb + " |  " + timePerIteration / (NS_PER_MS * 1.0) + " | " + fileInGb / (timePerIteration / (NS_PER_SEC * 1.0)).toFixed(10) + " | " + numberOfIterations);
+    console.log("| simdjson#parseWithString | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
     ns = BigInt(0); 
 });
 
 console.log();
 
-
 /*************** JSON#parse ***************/
-console.log("|   Fichier   | Taille  |   JSON#parse  (ms)   | JSON#parse (GB/s)  | iterations ");
+
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
   for (let i = 0; i < numberOfIterations; i++) {
@@ -103,7 +101,7 @@ files.forEach(function(fileName){
     var timePerIteration = Number(ns) / numberOfIterations;
     var timePerIterationPerSecond = timePerIteration / (NS_PER_SEC * 1.0);
     
-    console.log("| " + fileName + "|" + fileInGb + " |  " + timePerIteration / (NS_PER_MS * 1.0) + " | " + fileInGb / (timePerIteration / (NS_PER_SEC * 1.0)).toFixed(10) + " | " + numberOfIterations);
+    console.log("| JSON#parse | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
     ns = BigInt(0); 
 });
 console.log();
