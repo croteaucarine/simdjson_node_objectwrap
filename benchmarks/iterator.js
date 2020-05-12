@@ -39,7 +39,7 @@ files.forEach(function(fileName) {
 
     ns += diff[0] * NS_PER_MS + diff[1];
   }
-  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50) + '...');
+  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50) + '...');
   ns = 0; 
 
 });
@@ -69,7 +69,7 @@ files.forEach(function(fileName) {
 
     ns += diff[0] * NS_PER_MS + diff[1];
   }
-  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50)+ '...');
+  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50)+ '...');
   ns = 0; 
 
 });
@@ -98,7 +98,7 @@ files.forEach(function(fileName) {
 
     ns += diff[0] * NS_PER_MS + diff[1];
   }
-  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50) + '...');
+  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50) + '...');
   ns = 0; 
 
 });
@@ -128,7 +128,7 @@ files.forEach(function(fileName) {
 
     ns += diff[0] * NS_PER_MS + diff[1];
   }
-  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50)+ '...');
+  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + result.toString().substring(0, 50)+ '...');
   ns = 0; 
 
 });

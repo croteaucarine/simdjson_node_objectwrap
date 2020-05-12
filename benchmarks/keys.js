@@ -34,7 +34,7 @@ files.forEach(function(fileName) {
     gc(); 
   }
 
-  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50)+ "...");
+  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50)+ "...");
   
   ns = 0; 
 });
@@ -63,7 +63,7 @@ files.forEach(function(fileName) {
       gc(); 
     }
 
-    console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50) + "...");
+    console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50) + "...");
     
     ns = 0; 
 
@@ -90,7 +90,7 @@ files.forEach(function(fileName) {
     gc(); 
   }
 
-  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50)+ "...");
+  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50)+ "...");
   console.log(keys.toString());
   ns = 0; 
 });
@@ -118,7 +118,7 @@ files.forEach(function(fileName) {
     gc(); 
   }
 
-  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50) + "...");
+  console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50) + "...");
   console.log(keys.toString());
   
   ns = 0; 

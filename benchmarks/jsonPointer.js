@@ -46,7 +46,7 @@ tests.forEach(function(test) {
     gc();
   }
   test.timeInMs = (ns / numberOfIterations) / NS_PER_MS;
-  console.log(" | " + test.file + " | " + test.query + " | " + test.timeInMs.toFixed(10) + " | ms | " + numberOfIterations + " | " + test.output );
+  console.log(" | " + test.file + " | " + test.query + " | " + test.timeInMs.toFixed(10).replace('.', ',') + " | ms | " + numberOfIterations + " | " + test.output );
   ns = 0; 
 });
 
@@ -71,6 +71,6 @@ tests.forEach(function(test) {
     gc();
   }
   test.timeInMs = (ns / numberOfIterations) / NS_PER_MS;
-  console.log(" | " + test.file + " | " + test.query + " | " + test.timeInMs.toFixed(10) + " | ms | " + numberOfIterations + " | " + test.output );
+  console.log(" | " + test.file + " | " + test.query + " | " + test.timeInMs.toFixed(10).replace('.', ',') + " | ms | " + numberOfIterations + " | " + test.output );
   ns = 0; 
 });

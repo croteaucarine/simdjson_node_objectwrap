@@ -41,7 +41,7 @@ files.forEach(function(fileName){
       gc(); 
     }
 
-    console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + length);
+    console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + length);
     //console.log(individualTimes);
     individualTimes = "";
     ns = 0; 
@@ -71,7 +71,7 @@ files.forEach(function(fileName){
       gc(); 
     }
 
-    console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10) + "       |  ms     | " + numberOfIterations + " | " + length);
+    console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + length);
     
     ns = 0; 
 
