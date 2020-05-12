@@ -91,7 +91,7 @@ files.forEach(function(fileName) {
   }
 
   console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50)+ "...");
-  console.log(keys.toString());
+  //console.log(keys.toString());
   ns = 0; 
 });
 
@@ -119,7 +119,7 @@ files.forEach(function(fileName) {
   }
 
   console.log("| " + fileName + " |       " +  ((ns / (NS_PER_MS * 1.0)) / numberOfIterations).toFixed(10).replace('.', ',') + "       |  ms     | " + numberOfIterations + " | " + keys.length + " keys : " + keys.toString().substring(0, 50) + "...");
-  console.log(keys.toString());
+  //console.log(keys.toString());
   
   ns = 0; 
 
