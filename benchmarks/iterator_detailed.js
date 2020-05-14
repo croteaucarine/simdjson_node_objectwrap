@@ -18,7 +18,70 @@ var ns = 0;
 var results = "";
 
 /*************** simdjson#iterator ***************/
-console.log("|      Fichier       |        simdjson#for(let..of)         |");
+console.log("|      Fichier       |        simdjson#for(let..of)Methode1         |");
+
+files.forEach(function(fileName) {
+  for (let i = 0; i < numberOfIterations; i++) {
+    var simdjsonObj = new simdjson({path : (jsonexamplesPath + fileName)});
+    var result = [];
+    start = process.hrtime();
+    
+    try {
+      for (let item of simdjsonObj) {
+        result.push(item);
+      }
+    } catch(error) {
+      result = "not iterable";
+    } finally {
+      diff = process.hrtime(start);
+      gc(); 
+    }
+
+    ns = diff[0] * NS_PER_MS + diff[1];
+    results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+  }
+  console.log("| " + fileName + " |       " +  results );
+  ns = 0; 
+  results = "";
+
+});
+
+console.log();
+
+/*************** JSON#iterator ***************/
+console.log("|      Fichier       |        JSON#for(let..of)Methode1         |");
+files.forEach(function(fileName) {
+  file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
+
+  for (let i = 0; i < numberOfIterations; i++) {
+    var result = [];
+    var jsonOBJ = JSON.parse(file);
+    start = process.hrtime();
+    
+    try {
+      for (let item of jsonOBJ) {
+        result.push(item);
+      }
+    } catch(error) {
+      result = "not iterable";
+    } finally {
+      diff = process.hrtime(start);
+      gc(); 
+    }
+
+    ns = diff[0] * NS_PER_MS + diff[1];
+    results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+  }
+  
+  console.log("| " + fileName + " |       " +  results );
+  ns = 0; 
+  results = "";
+
+});
+console.log();
+
+/*************** simdjson#iterator ***************/
+console.log("|      Fichier       |        simdjson#for(let..of)Methode2         |");
 
 files.forEach(function(fileName) {
   var simdjsonObj = new simdjson({path : (jsonexamplesPath + fileName)});
@@ -50,7 +113,7 @@ files.forEach(function(fileName) {
 console.log();
 
 /*************** JSON#iterator ***************/
-console.log("|      Fichier       |        JSON#for(let..of)         |");
+console.log("|      Fichier       |        JSON#for(let..of)Methode2         |");
 files.forEach(function(fileName) {
   file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
   var jsonOBJ = JSON.parse(file);
