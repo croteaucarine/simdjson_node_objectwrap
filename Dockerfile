@@ -15,6 +15,10 @@ COPY package.json package.json
 
 COPY . .
 
+RUN node -v
+RUN npm -v
+RUN npm list
+
 RUN npm install --unsafe-perm
 
 RUN if [ ${BENCHMARK_TYPE} = "parse" ] ; then bash ./scripts/parse.sh; else npm run benchmarks ; fi
