@@ -8,8 +8,7 @@ const path = './jsonexamples/small/themoviedb.json';
 const simdjsonOBJ = new simdjson({path : path});
 
 // Display object content
-const test = simdjsonOBJ.toString();
-console.log(test);
+console.log(simdjsonOBJ);
 //console.log(simdjsonOBJ.toJSON());
 
 // Display Object Keys

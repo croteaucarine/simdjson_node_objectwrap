@@ -12,22 +12,22 @@ var JSONObj = JSON.parse(file);
 console.log(JSONObj);
 
 // Affiche la taille de l'objet (tableau seulement)
-console.log(JSONObj.length);
+//console.log(JSONObj.length);
 
 // Affiche les cles de l'objet
-console.log(Object.keys(JSONObj));
+//console.log(Object.keys(JSONObj));
 
 // Parcours de l'objet (tableau seulement)
-try {
+/*try {
     for (let item of JSONObj) {
         console.log(item);
     }
 } catch(error) {
     console.error(error);
-}
+}*/
 
 // Parcours de l'objet et affichage de propriétés imbriquées spécifiques (tableau seulement)
-try {
+/*try {
     for (let item of JSONObj) {
         console.log('actor : ');
         console.log(item.actor);
@@ -44,4 +44,4 @@ try {
     }
 } catch(error) {
     console.error(error);
-}
+}*/
