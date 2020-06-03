@@ -4,6 +4,7 @@
 #include <future>
 #include "../simdjson/src/simdjson.h"
 #include <chrono>
+#include <sstream>
 
 #if (SIMDJSON_CPLUSPLUS < 201703L)
 #error simdjson addon requires a compiler compliant with the C++17 standard
@@ -157,18 +158,21 @@ public:
   {
     int i = 0;
     std::string parsedJSONToString = "";
+    std::ostringstream strs;
+    std::string_view strElement;
 
     switch (element.type()) {
       case dom::element_type::ARRAY:
         parsedJSONToString += "[";
         for (dom::element child : dom::array(element)) {
           if(i != 0) {
-          parsedJSONToString += ", ";
+          parsedJSONToString += ",";
         }
+          if(child.type() != dom::element_type::OBJECT) parsedJSONToString += " ";
           parsedJSONToString += ParsedJSONToString(child, spaces, true); // let us recurse
           i++;
         }
-        parsedJSONToString += "]"; 
+        parsedJSONToString += " ]"; 
         break;       
     case dom::element_type::OBJECT:
       // Todo: check spaces
@@ -177,18 +181,18 @@ public:
         parsedJSONToString += "\n" + spaces;
       }
       
-      parsedJSONToString += "{ \n";
+      parsedJSONToString += "{\n";
       for (dom::key_value_pair field : dom::object(element)) {
         if(i != 0) {
-          parsedJSONToString += ", \n";
+          parsedJSONToString += ",\n";
         }
         parsedJSONToString += spaces + "  ";
         parsedJSONToString += field.key;
-        parsedJSONToString += " : ";
+        parsedJSONToString += ": ";
         parsedJSONToString += ParsedJSONToString(field.value, "  " + spaces, false);
         i++;
       }
-      parsedJSONToString += " \n" + spaces + "}";
+      parsedJSONToString += "\n" + spaces + "}";
       break;
     case dom::element_type::INT64:
       parsedJSONToString += std::to_string(int64_t(element));
@@ -197,10 +201,21 @@ public:
       parsedJSONToString += std::to_string(uint64_t(element));
       break;
     case dom::element_type::DOUBLE:
-      parsedJSONToString += std::to_string(double(element));
+      
+      strs << double(element);
+      parsedJSONToString += strs.str(); 
       break;
     case dom::element_type::STRING:
-      parsedJSONToString +=  std::string_view(element);
+      strElement = std::string_view(element);
+      if(strElement.find("'") == std::string::npos) {
+        parsedJSONToString +=  "'";
+        parsedJSONToString +=  std::string_view(element);
+        parsedJSONToString +=  "'";
+      } else {
+        parsedJSONToString +=  "\"";
+        parsedJSONToString +=  std::string_view(element);
+        parsedJSONToString +=  "\"";
+      }
       break;
     case dom::element_type::BOOL:
       parsedJSONToString += bool(element) ? "true" : "false";
@@ -340,6 +355,8 @@ public:
     {
       SetJSObjects(info.Env());
       Napi::Function iterator = Napi::Array::New(info.Env()).Get(Napi::Symbol::WellKnown(env, "iterator")).As<Napi::Function>();
+      
+      // Todo : optimize iterator.Call as it takes huge times each n/th times depending on number of objects.
       return iterator.Call(constructor.Value().Get("jsObject"), {});
     }
     else

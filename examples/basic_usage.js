@@ -3,43 +3,43 @@
 const fs = require('fs');
 const { simdjson } = require('bindings')('addon');
 
-const github_events = './jsonexamples/github_events.json';
+const path = './jsonexamples/small/themoviedb.json';
 
-const simdjsonOBJ = new simdjson({path : github_events});
-//simdjsonOBJ.load({path : github_events});
-//simdjsonOBJ.parse();
+const simdjsonOBJ = new simdjson({path : path});
 
 // Display object content
-console.log(simdjsonOBJ);
+const test = simdjsonOBJ.toString();
+console.log(test);
+//console.log(simdjsonOBJ.toJSON());
 
 // Display Object Keys
-console.log(simdjsonOBJ.keys());
+//console.log(simdjsonOBJ.keys());
 
 // Display Object length
-console.log(simdjsonOBJ.length);
+//console.log(simdjsonOBJ.length);
 
 // Display strignified Object
 //console.log(JSON.stringify(simdjsonOBJ));
 
 // Loop through JSON Array 
 // try-catch intercepts error if object is not an array
-try {
+/*try {
     var i  = 1;
+    for (let item of simdjsonOBJ) {
+        console.log(i);
+        console.log(item.genre_ids);
+        i++;
+    }
+} catch(error) {
+    console.error(error);
+}*/
+
+// Affichage des objets imbriqués
+/*try {
     for (let item of simdjsonOBJ) {
         console.log(item);
-        i++;
+        console.log(item.genre_ids);
     }
 } catch(error) {
     console.error(error);
-}
-
-// Display nested elements
-try {
-    var i  = 1;
-    for (let item of simdjsonOBJ) {
-        console.log(item.actor.login);
-        i++;
-    }
-} catch(error) {
-    console.error(error);
-}
+}*/

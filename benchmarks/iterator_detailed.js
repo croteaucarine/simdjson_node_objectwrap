@@ -38,7 +38,8 @@ files.forEach(function(fileName) {
     }
 
     ns = diff[0] * NS_PER_MS + diff[1];
-    results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+    results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
+    result = [];
   }
   console.log("| " + fileName + " |       " +  results );
   ns = 0; 
@@ -70,8 +71,11 @@ files.forEach(function(fileName) {
     }
 
     ns = diff[0] * NS_PER_MS + diff[1];
-    results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+    results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
+    result = [];
   }
+
+  console.log(result.length);
   
   console.log("| " + fileName + " |       " +  results );
   ns = 0; 
@@ -102,11 +106,13 @@ files.forEach(function(fileName) {
     }
 
     ns = diff[0] * NS_PER_MS + diff[1];
-    results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+    results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
+    result = [];
   }
   console.log("| " + fileName + " |       " +  results );
   ns = 0; 
   results = "";
+  result = [];
 
 });
 
@@ -134,7 +140,8 @@ files.forEach(function(fileName) {
     }
 
     ns = diff[0] * NS_PER_MS + diff[1];
-    results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+    results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
+    result = [];
   }
   
   console.log("| " + fileName + " |       " +  results );

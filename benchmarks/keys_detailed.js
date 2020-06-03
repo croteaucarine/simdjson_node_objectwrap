@@ -28,7 +28,7 @@ files.forEach(function(fileName) {
       keys = simdjsonObj.keys();
       diff = process.hrtime(start);
       ns = diff[0] * NS_PER_MS + diff[1];
-      results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+      results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
       
     } catch(error) {
       console.log("error" + error);
@@ -58,7 +58,7 @@ files.forEach(function(fileName) {
         keys = Object.keys(jsonOBJ);
         diff = process.hrtime(start);
         ns = diff[0] * NS_PER_MS + diff[1];
-        results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+        results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
         
       } catch(error) {
         console.log("error" + error);
@@ -86,7 +86,7 @@ files.forEach(function(fileName) {
       keys = simdjsonObj.keys();
       diff = process.hrtime(start);
       ns = diff[0] * NS_PER_MS + diff[1];
-      results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+      results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
       
     } catch(error) {
       console.log("error" + error);
@@ -116,7 +116,7 @@ files.forEach(function(fileName) {
         keys = Object.keys(jsonOBJ);
         diff = process.hrtime(start);
         ns = diff[0] * NS_PER_MS + diff[1];
-        results += (ns / (NS_PER_MS * 1.0)).toFixed(10) + "|";
+        results += (ns / (NS_PER_MS * 1.0)).toFixed(3) + "|";
         
       } catch(error) {
         console.log("error" + error);

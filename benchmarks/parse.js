@@ -10,11 +10,12 @@ var jsonexamplesPath = './jsonexamples/';
 const numberOfIterations = 1000;
 
 var diff;
-var ns = BigInt(0);
+var ns = 0;
 var file;
 const GbSize = 1024 * 1024;
 const NS_PER_SEC = 1e9;
 const NS_PER_MS = 1e6;
+const MS_PER_SEC = 1000.0;
 
 
 console.log("| Méthode |   Fichier   | Taille  |   (ms)   |  (GB/s)  | iterations ");
@@ -29,15 +30,14 @@ files.forEach(function(fileName){
       var start = process.hrtime.bigint();
       simdjsonObj.parse();
       var end = process.hrtime.bigint();
-      ns += (end-start);
+      ns += Number(end-start);
 
       gc(); 
     }
     var fileInGb = fileSize / GbSize;
-    var timePerIteration = Number(ns) / numberOfIterations;
-    
-    console.log("| simdjson#parseAfterObjectLoaded | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
-    ns = BigInt(0); 
+    var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
+    console.log("| Méthode 1 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
+    ns = 0; 
 });
 
 console.log();
@@ -50,14 +50,14 @@ files.forEach(function(fileName){
       var start = process.hrtime.bigint();
       var simdjsonObj = new simdjson({path : (jsonexamplesPath + fileName)});
       var end = process.hrtime.bigint();
-      ns += (end-start);
+      ns += Number(end-start);
+
       gc(); 
     }
     var fileInGb = fileSize / GbSize;
-    var timePerIteration = Number(ns) / numberOfIterations;
-    
-    console.log("| simdjson#parseWithPath | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
-    ns = BigInt(0); 
+    var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
+    console.log("| Méthode 2 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
+    ns = 0; 
 });
 
 console.log();
@@ -71,14 +71,14 @@ files.forEach(function(fileName){
       file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
       var simdjsonObj = new simdjson(file);
       var end = process.hrtime.bigint();
-      ns += (end-start);
+      ns += Number(end-start);
+
       gc(); 
     }
     var fileInGb = fileSize / GbSize;
-    var timePerIteration = Number(ns) / numberOfIterations;
-    
-    console.log("| simdjson#parseWithString | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
-    ns = BigInt(0); 
+    var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
+    console.log("| Méthode 3 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
+    ns = 0; 
 });
 
 console.log();
@@ -94,15 +94,14 @@ files.forEach(function(fileName){
       var start = process.hrtime.bigint();
       var JSONObj = JSON.parse(file);
       var end = process.hrtime.bigint();
-      ns += (end-start);
+      ns += Number(end-start);
+
       gc(); 
     }
     var fileInGb = fileSize / GbSize;
-    var timePerIteration = Number(ns) / numberOfIterations;
-    var timePerIterationPerSecond = timePerIteration / (NS_PER_SEC * 1.0);
-    
-    console.log("| JSON#parse | " + fileName + "|" + fileInGb + " |  " + (timePerIteration / (NS_PER_MS * 1.0)).toFixed(10).replace('.', ',') + " | " + (fileInGb / (timePerIteration / (NS_PER_SEC * 1.0))).toFixed(10).replace('.', ',') + " | " + numberOfIterations);
-    ns = BigInt(0); 
+    var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
+    console.log("| Méthode 4 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
+    ns = 0; 
 });
 console.log();
 
