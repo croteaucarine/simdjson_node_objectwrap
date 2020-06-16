@@ -5,6 +5,7 @@ var readlineSync = require('readline-sync');
 const { simdjson } = require('bindings')('addon');
 
 var files = ['apache_builds.json', 'canada.json', 'citm_catalog.json', 'github_events.json', 'github_events_100.json', 'github_events_1000.json', 'gsoc-2018.json', 'instruments.json', 'marine_ik.json', 'mesh.json', 'mesh.pretty.json', 'numbers.json', 'random.json', 'twitter.json', 'twitterescaped.json', 'update-center.json']
+files = files.reverse();
 var jsonexamplesPath = './jsonexamples/';
 
 const numberOfIterations = 1000;
