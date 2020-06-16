@@ -4,7 +4,7 @@ const fs = require('fs');
 var readlineSync = require('readline-sync');
 const { simdjson } = require('bindings')('addon');
 
-var files = ['github_events_1000.json'];
+var files = ['github_events.json', 'github_events.json', 'github_events_1000.json'];
 var jsonexamplesPath = './jsonexamples/';
 
 const numberOfIterations = 1000;
