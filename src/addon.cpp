@@ -17,27 +17,29 @@ class simdjsonJS : public Napi::ObjectWrap<simdjsonJS>
 public:
   simdjsonJS(const Napi::CallbackInfo &info) : Napi::ObjectWrap<simdjsonJS>(info)
   {
-    constructor.Value().Delete("jsObject");
-    constructor.Value().Delete("keys");
-    constructor.Value().Delete("ToStringTag");
+    //constructor.Value().Delete("jsObject");
+    //constructor.Value().Delete("keys");
+    //constructor.Value().Delete("ToStringTag");
     
     if(info.Length() == 1)
     {
       
-      const Napi::Value objectToLoad = info[0];
+      //const Napi::Value objectToLoad = info[0];
       //dom::parser parser;
 
-      if(objectToLoad.IsString()) {
+      if(info[0].IsString()) {
         // String passed is considered as JSON Document
-        _parser.parse(padded_string(objectToLoad.ToString()));
-      } else if (objectToLoad.IsObject()) {
-        Napi::Object obj = objectToLoad.As<Napi::Object>();
+        std::string json = info[0].As<Napi::String>();
+        _parser.parse(json);
+      } else if (info[0].IsObject()) {
+        Napi::Object obj = info[0].As<Napi::Object>();
 
         if(obj.Has("path") && obj.Get("path").IsString()) {
           _parser.load(obj.Get("path").ToString());
 
         } else if(obj.Has("doc") && obj.Get("doc").IsString()) {
-          _parser.parse(padded_string(obj.Get("doc").ToString()));
+          std::string json = obj.Get("doc").As<Napi::String>();
+          _parser.parse(json);
         } else {
           // Throw error : Object is missing parameter path or doc
           //Napi::Error::New(info.Env(), "missing parameter path or doc").ThrowAsJavaScriptException();
@@ -455,7 +457,7 @@ public:
 
   struct UserDataHolder
   {
-    size_t json_index;
+    std::string json_pointer;
     dom::element element;
   };
 
@@ -475,7 +477,7 @@ public:
       case dom::element_type::OBJECT :
       case dom::element_type::ARRAY :
         {
-        holder->json_index = 0; // Todo : get element.json_index
+        holder->json_pointer = "";
         holder->element = element; 
 
         auto callbackGetter = std::bind(&simdjsonJS::ObjectGetter, this, std::placeholders::_1);
@@ -550,6 +552,137 @@ public:
     return v;
   }
 
+  static Napi::Value lazyParse(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+    std::string json = info[0].As<Napi::String>();
+    dom::parser parser;
+    error_code error = parser.parse(json).error();
+    if (error) {
+      Napi::Error::New(env, error_message(error)).ThrowAsJavaScriptException();
+      return Napi::Object::New(env);
+    }
+    Napi::External<dom::document> buffer = Napi::External<dom::document>::New(env, new dom::document(std::move(parser.doc)),
+      [](Napi::Env /*env*/, dom::document * doc) {
+        delete doc;
+      });
+    Napi::Object result = Napi::Object::New(env);
+    result.Set("buffer", buffer);
+    //result.Set("valueForKeyPath", Napi::Function::New(env, simdjsonnode::ValueForKeyPathWrapped));
+    return result;  
+  }
+
+  static Napi::Value lazyParse1Depth(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+    std::string json = info[0].As<Napi::String>();
+    dom::parser parser;
+    error_code error = parser.parse(json).error();
+    if (error) {
+      Napi::Error::New(env, error_message(error)).ThrowAsJavaScriptException();
+      return Napi::Object::New(env);
+    }
+
+    Napi::Object jsonObject = makeJSONObject1DepthStatic(info, parser.doc.root()).As<Napi::Object>();
+    Napi::External<dom::document> buffer = Napi::External<dom::document>::New(env, new dom::document(std::move(parser.doc)),
+      [](Napi::Env /*env*/, dom::document * doc) {
+        delete doc;
+      });
+
+    jsonObject.Set("buffer", buffer);
+    //result.Set("valueForKeyPath", Napi::Function::New(env, simdjsonnode::ValueForKeyPathWrapped));
+    return jsonObject;  
+  }
+
+  static Napi::Value makeJSONObject1DepthStatic(const Napi::CallbackInfo& info, dom::element element)
+  {
+    Napi::Value v;
+    Napi::Env env = info.Env();
+    Napi::Object obj = Napi::Object::New(env);
+    Napi::Array array = Napi::Array::New(env);
+    int i = 0;
+
+    switch (element.type()) {
+      case dom::element_type::ARRAY:
+        for (dom::element child : dom::array(element)) {
+          array.Set(i, makeJSONObject1DepthStatic(info, child));
+          i++;
+        }
+        v = array;
+        break;
+      case dom::element_type::OBJECT:
+        for (dom::key_value_pair field : dom::object(element)) {
+
+          Napi::String key = Napi::String::New(env, std::string(field.key));
+          obj.DefineProperty(getPropertyStatic(info, obj, key, field.value));
+        }
+        v = obj; 
+        break;
+      case dom::element_type::INT64:
+        v = Napi::Number::New(env, int64_t(element));
+        break;
+      case dom::element_type::UINT64:
+        v = Napi::Number::New(env, uint64_t(element));
+        break;
+      case dom::element_type::DOUBLE:
+        v = Napi::Number::New(env, double(element));
+        break;
+      case dom::element_type::STRING:
+        v = Napi::String::New(env, std::string(element));
+        break;
+      case dom::element_type::BOOL:
+        v = Napi::Boolean::New(env, bool(element));
+        break;
+      case dom::element_type::NULL_VALUE:
+        v = env.Null();
+        break;
+    }
+    return v;
+  }
+
+  static Napi::Value ObjectGetterStatic(const Napi::CallbackInfo& info) {
+    // todo : Get argument and send associated data
+
+    return info.Env().Null();
+}
+
+  static Napi::PropertyDescriptor getPropertyStatic(const Napi::CallbackInfo& info, Napi::Object &obj, Napi::String key, dom::element element)
+  {
+    Napi::Env env = info.Env();
+    Napi::PropertyDescriptor pd = Napi::PropertyDescriptor::Value("", env.Null());
+    UserDataHolder *holder = new UserDataHolder();
+
+    switch(element.type()) {
+      case dom::element_type::OBJECT :
+      case dom::element_type::ARRAY :
+        {
+        holder->json_pointer = "0/actor"; 
+        holder->element = element;
+        
+        pd = Napi::PropertyDescriptor::Accessor(env, obj, key, ObjectGetterStatic, napi_enumerable, reinterpret_cast<void*>(holder));
+        }
+        break;
+      case dom::element_type::INT64 :
+        pd = Napi::PropertyDescriptor::Value(key, Napi::Number::New(env, int64_t(element)), napi_enumerable);
+        break;
+      case dom::element_type::UINT64 :
+        pd = Napi::PropertyDescriptor::Value(key, Napi::Number::New(env, uint64_t(element)), napi_enumerable);
+        break;
+      case dom::element_type::DOUBLE :
+        pd = Napi::PropertyDescriptor::Value(key, Napi::Number::New(env, double(element)), napi_enumerable);
+        break;
+      case dom::element_type::STRING :
+        pd = Napi::PropertyDescriptor::Value(key, Napi::String::New(env, std::string(element)), napi_enumerable);
+        break;
+      case dom::element_type::BOOL :
+        pd = Napi::PropertyDescriptor::Value(key, Napi::Boolean::New(env, bool(element)), napi_enumerable);
+        break;
+      case dom::element_type::NULL_VALUE :
+        pd = Napi::PropertyDescriptor::Value(key, env.Null(), napi_enumerable);
+        break;
+    }
+
+    return pd;
+  }
+
   static void Initialize(Napi::Env env, Napi::Object exports)
   {
     Napi::Function func = DefineClass(env, "simdjson", {
@@ -561,7 +694,11 @@ public:
       InstanceMethod("toJSON", &simdjsonJS::toJSON, napi_enumerable), 
       InstanceMethod("getValue", &simdjsonJS::GetValue, napi_enumerable),
       InstanceAccessor(Napi::Symbol::WellKnown(env, "toStringTag"), &simdjsonJS::ToStringTag, nullptr, napi_enumerable), 
-      InstanceMethod(Napi::Symbol::WellKnown(env, "iterator"), &simdjsonJS::Iterator, napi_enumerable)
+      InstanceMethod(Napi::Symbol::WellKnown(env, "iterator"), &simdjsonJS::Iterator, napi_enumerable),
+
+      // tests méthodes statiques
+      StaticMethod("lazyParse", &simdjsonJS::lazyParse, napi_enumerable),
+      StaticMethod("lazyParse1Depth", &simdjsonJS::lazyParse1Depth, napi_enumerable)
     });
 
     constructor = Napi::Persistent(func);

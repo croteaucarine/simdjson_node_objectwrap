@@ -19,16 +19,16 @@ const MS_PER_SEC = 1000.0;
 
 
 console.log("| Méthode |   Fichier   | Taille  |   (ms)   |  (GB/s)  | iterations ");
-/*************** simdjson#load & simdjson#parseAfterObjectLoaded ***************/
+/*************** simdjson#lazyParse ***************/
 
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
+  file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
+
   for (let i = 0; i < numberOfIterations; i++) {
-      var simdjsonObj = new simdjson();
-      simdjsonObj.load({path : (jsonexamplesPath + fileName)});
       
       var start = process.hrtime.bigint();
-      simdjsonObj.parse();
+      simdjson.lazyParse(file);
       var end = process.hrtime.bigint();
       ns += Number(end-start);
 
@@ -36,19 +36,22 @@ files.forEach(function(fileName){
     }
     var fileInGb = fileSize / GbSize;
     var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
-    console.log("| Méthode 1 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
+    console.log("| Méthode lazyParse | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
     ns = 0; 
 });
 
 console.log();
 
-/*************** simdjson#parseWithPath ***************/
+/*************** simdjson#lazyParse1Depth ***************/
 
 files.forEach(function(fileName){
   var fileSize = getFileSize(jsonexamplesPath + fileName);
+  file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
+
   for (let i = 0; i < numberOfIterations; i++) {
+      
       var start = process.hrtime.bigint();
-      var simdjsonObj = new simdjson({path : (jsonexamplesPath + fileName)});
+      simdjson.lazyParse1Depth(file);
       var end = process.hrtime.bigint();
       ns += Number(end-start);
 
@@ -56,32 +59,13 @@ files.forEach(function(fileName){
     }
     var fileInGb = fileSize / GbSize;
     var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
-    console.log("| Méthode 2 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
+    console.log("| Méthode lazyParse1Depth | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
     ns = 0; 
 });
 
 console.log();
 
-/*************** simdjson#parseWithString ***************/
 
-files.forEach(function(fileName){
-  var fileSize = getFileSize(jsonexamplesPath + fileName);
-  for (let i = 0; i < numberOfIterations; i++) {
-      file = fs.readFileSync(jsonexamplesPath + fileName, 'utf-8');
-      var start = process.hrtime.bigint();
-      var simdjsonObj = new simdjson(file);
-      var end = process.hrtime.bigint();
-      ns += Number(end-start);
-
-      gc(); 
-    }
-    var fileInGb = fileSize / GbSize;
-    var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
-    console.log("| Méthode 3 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
-    ns = 0; 
-});
-
-console.log();
 
 /*************** JSON#parse ***************/
 
@@ -100,7 +84,7 @@ files.forEach(function(fileName){
     }
     var fileInGb = fileSize / GbSize;
     var timePerIteration = Math.round(ns / numberOfIterations * 1000) / 1000;
-    console.log("| Méthode 4 | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
+    console.log("| Méthode JSON | " + fileName + "|" + fileInGb.toFixed(15).replace('.', ',') + " |  " + (timePerIteration / NS_PER_MS).toFixed(3).replace('.', ',') + " | " + (fileInGb / (timePerIteration / NS_PER_SEC)).toFixed(2).replace('.', ',') + " | " + numberOfIterations);
     ns = 0; 
 });
 console.log();

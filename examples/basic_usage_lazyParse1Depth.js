@@ -1,24 +1,28 @@
 'use strict';
 
 const fs = require('fs');
+const { simdjson } = require('bindings')('addon');
 
-const file_path = './jsonexamples/small/themoviedb.json';
-
+const file_path = './jsonexamples/github_events.json';
 const file = fs.readFileSync(file_path, 'utf-8');
-var JSONObj = JSON.parse(file);
+const simdjsonOBJ = simdjson.lazyParse1Depth(file);
 
 // Affiche le contenu de l'objet
-//console.log(JSONObj);
+console.log("objet");
+console.log(simdjsonOBJ);
 
 // Affiche la taille de l'objet (tableau seulement)
-//console.log(JSONObj.length);
+console.log("length");
+console.log(simdjsonOBJ.length);
 
 // Affiche les cles de l'objet
-//console.log(Object.keys(JSONObj));
+console.log("keys");
+console.log(Object.keys(simdjsonOBJ));
 
 // Parcours de l'objet (tableau seulement)
+console.log("Parcours");
 try {
-    for (let item of JSONObj) {
+    for (let item of simdjsonOBJ) {
         console.log(item);
     }
 } catch(error) {
@@ -26,8 +30,8 @@ try {
 }
 
 // Parcours de l'objet et affichage de propriétés imbriquées spécifiques (tableau seulement)
-/*try {
-    for (let item of JSONObj) {
+try {
+    for (let item of simdjsonOBJ) {
         console.log('actor : ');
         console.log(item.actor);
         console.log();
@@ -43,4 +47,4 @@ try {
     }
 } catch(error) {
     console.error(error);
-}*/
+}
