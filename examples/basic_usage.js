@@ -8,11 +8,11 @@ const path = './jsonexamples/github_events_1000.json';
 const simdjsonOBJ = new simdjson({path : path});
 
 // Display object content
-//console.log(simdjsonOBJ);
-//console.log(simdjsonOBJ.toJSON());
+console.log(simdjsonOBJ);
+console.log(simdjsonOBJ.toJSON());
 
 // Display Object Keys
-//console.log(simdjsonOBJ.keys());
+console.log(simdjsonOBJ.keys());
 
 // Display Object length
 console.log(simdjsonOBJ.length);
