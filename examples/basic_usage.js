@@ -22,7 +22,7 @@ console.log(simdjsonOBJ.length);
 
 // Loop through JSON Array 
 // try-catch intercepts error if object is not an array
-/*try {
+try {
     var i  = 1;
     for (let item of simdjsonOBJ) {
         console.log(i);
@@ -31,14 +31,14 @@ console.log(simdjsonOBJ.length);
     }
 } catch(error) {
     console.error(error);
-}*/
+}
 
 // Affichage des objets imbriqués
-/*try {
+try {
     for (let item of simdjsonOBJ) {
         console.log(item);
         //console.log(item.genre_ids);
     }
 } catch(error) {
     console.error(error);
-}*/
+}
